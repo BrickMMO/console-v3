@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         name = "'.addslashes($_POST['name']).'",
         width = "'.addslashes($_POST['width']).'",
         length = "'.addslashes($_POST['length']).'"
-        WHERE id = '.$_SESSION['city']['id'].'
+        WHERE id = '.$_city['id'].'
         LIMIT 1';
     mysqli_query($connect, $query);
 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     
 }
 
-define('APP_NAME', $_SESSION['city']['name']);
+define('APP_NAME', $_city['name']);
 
 define('PAGE_TITLE', 'Members');
 define('PAGE_SELECTED_SECTION', '');
@@ -43,12 +43,10 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$city = city_fetch($_SESSION['city']['id']);
-
 $query = 'SELECT users.*
     FROM users
     INNER JOIN city_user ON users.id = city_user.user_id
-    WHERE city_user.city_id = '.$_SESSION['city']['id'].'
+    WHERE city_user.city_id = '.$_city['id'].'
     ORDER BY last,first';
 $result = mysqli_query($connect, $query);
 
@@ -62,7 +60,7 @@ $result = mysqli_query($connect, $query);
         height="50"
         style="vertical-align: top"
     />
-    <?=$_SESSION['city']['name']?>
+    <?=$_city['name']?>
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
@@ -91,7 +89,7 @@ $result = mysqli_query($connect, $query);
                 />
             </td>
             <td>
-                <?php if($record['city_id'] == $_SESSION['city']['id']): ?>
+                <?php if($record['city_id'] == $_city['id']): ?>
                     <i class="fa-solid fa-lock"></i>
                 <?php endif; ?>
             </td>
@@ -107,7 +105,7 @@ $result = mysqli_query($connect, $query);
                 <?php endif; ?>
             </td>
             <td>
-                <?php if($record['city_id'] != $_SESSION['city']['id']): ?>
+                <?php if($record['city_id'] != $_city['id']): ?>
                     <a href="/city/uninvite/user/<?=$record['id']?>">
                         <i class="fa-solid fa-xmark"></i>
                     </a>

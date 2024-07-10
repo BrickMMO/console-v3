@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
     $query = 'UPDATE cities SET
         image = "'.addslashes($image).'"
-        WHERE id = '.$_SESSION['city']['id'].'
+        WHERE id = '.$_city['id'].'
         LIMIT 1';
     mysqli_query($connect, $query);
     
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     
 }
 
-define('APP_NAME', $_SESSION['city']['name']);
+define('APP_NAME', $_city['name']);
 
 define('PAGE_TITLE', 'Image');
 define('PAGE_SELECTED_SECTION', '');
@@ -54,7 +54,7 @@ include('templates/message.php');
         height="50"
         style="vertical-align: top"
     />
-    <?=$_SESSION['city']['name']?>
+    <?=$_city['name']?>
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 

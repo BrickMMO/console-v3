@@ -4,33 +4,50 @@ security_check();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
-    
+
     // Basic serverside validation
     if (
-        !validate_blank($_POST['name']) || 
-        !validate_number($_POST['width']) || 
-        !validate_number($_POST['length']))
+        !validate_blank($_POST['name']) &&
+        !validate_email($_POST['email']))
     {
-        message_set('Login Error', 'There was an error with your profile information.', 'red');
-        header_redirect('/city/profile');
+        message_set('Invite Error', 'There was an error with the provided eamil address.', 'red');
+        header_redirect('/city/invite');
     }
 
-    $query = 'UPDATE cities SET
-        name = "'.addslashes($_POST['name']).'",
-        width = "'.addslashes($_POST['width']).'",
-        length = "'.addslashes($_POST['length']).'"
-        WHERE id = '.$_city['id'].'
-        LIMIT 1';
+    $data['invite_hash'] = string_hash();
+
+    $query = 'INSERT INTO invites (
+            email, 
+            invite_hash,
+            city_id,
+            user_id,
+            created_at,
+            updated_at
+        ) VALUES (
+            "'.addslashes($_POST['email']).'",
+            "'.addslashes($data['invite_hash']).'",
+            '.$_city['id'].',
+            '.$_user['id'].',
+            NOW(),
+            NOW()
+        )';
     mysqli_query($connect, $query);
 
-    message_set('Success', 'Your city profile has been updated.');
+    ob_start();
+    include(__DIR__.'/templates/email_invite.php');
+    $message = ob_get_contents();
+    ob_end_clean();
+
+    email_send($_POST['email'], $_POST['name'], $message, 'Invitation to BrickMMO');
+
+    message_set('Success', 'Your city invite has been sent.');
     header_redirect('/city/dashboard');
     
 }
 
 define('APP_NAME', $_city['name']);
 
-define('PAGE_TITLE', 'City Profile');
+define('PAGE_TITLE', 'Invite Member');
 define('PAGE_SELECTED_SECTION', '');
 define('PAGE_SELECTED_SUB_PAGE', '');
 
@@ -40,8 +57,6 @@ include('templates/nav_slideout.php');
 include('templates/main_header.php');
 
 include('templates/message.php');
-
-$city = city_fetch($_city['id']);
 
 ?>
 
@@ -57,11 +72,11 @@ $city = city_fetch($_city['id']);
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
-    City Profile
+    Invite Member
 </p>
 <hr />
 
-<h2>City Profile</h2>
+<h2>Invite Member</h2>
 
 <form
     method="post"
@@ -75,41 +90,26 @@ $city = city_fetch($_city['id']);
         type="text" 
         id="name" 
         autocomplete="off"
-        value="<?=$city['name']?>"
     />
     <label for="name" class="w3-text-gray">
         Name <span id="name-error" class="w3-text-red"></span>
     </label>
 
-    <input 
-        name="width" 
-        class="w3-input w3-margin-top w3-border" 
-        type="number" 
-        id="width" 
-        autocomplete="off"
-        value="<?=$city['width']?>"
-    />
-    <label for="width" class="w3-text-gray">
-        <i class="fa-solid fa-ruler"></i>
-        Width <span id="width-error" class="w3-text-red"></span>
-    </label>
-
-    <input 
-        name="length" 
+    <input  
+        name="email" 
         class="w3-input w3-border w3-margin-top" 
-        type="number" 
-        id="length" 
-        autocomplete="off" 
-        value="<?=$city['length']?>"
-    />  
-    <label for="length" class="w3-text-gray">
-        <i class="fa-solid fa-ruler"></i>
-        Length <span id="length-error" class="w3-text-red"></span>
+        type="text" 
+        id="email" 
+        autocomplete="off"
+    />
+    <label for="email" class="w3-text-gray">
+        <i class="fa-solid fa-envelope"></i>
+        Email <span id="email-error" class="w3-text-red"></span>
     </label>
 
     <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="return validateMainForm();">
         <i class="fa-solid fa-pen fa-padding-right"></i>
-        Update Profile
+        Invite Member
     </button>
 </form>
 
@@ -126,19 +126,15 @@ $city = city_fetch($_city['id']);
             errors++;
         }
 
-        let width = document.getElementById("width");
-        let width_error = document.getElementById("width-error");
-        width_error.innerHTML = "";
-        if (width.value == "") {
-            width_error.innerHTML = "(width is required)";
+        let email_pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$";
+        let email = document.getElementById("email");
+        let email_error = document.getElementById("email-error");
+        email_error.innerHTML = "";
+        if (email.value == "") {
+            email_error.innerHTML = "(email is required)";
             errors++;
-        }
-
-        let length = document.getElementById("length");
-        let length_error = document.getElementById("length-error");
-        length_error.innerHTML = "";
-        if (length.value == "") {
-            length_error.innerHTML = "(length is required)";
+        } else if (!email.value.match(email_pattern)) {
+            email_error.innerHTML = "(email is invalid)";
             errors++;
         }
 

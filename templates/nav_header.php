@@ -68,13 +68,13 @@
                 style="height: 35px"
             /></a>
 
-            <?php if(isset($_SESSION['city'])): ?>
+            <?php if($_city): ?>
                 <button
                     class="w3-border w3-border-gray w3-button w3-margin-left"
                     onclick="open_modal('city')"
                 >
                     <i class="fa-solid fa-city fa-padding-right"></i>
-                    <?=$_SESSION['city']['name']?>
+                    <?=$_city['name']?>
                     <i class="fa-solid fa-caret-down"></i>
                 </button>
             <?php else: ?>

@@ -70,7 +70,7 @@ $navigation = navigation_array();
 
       <?php if($level['title'] == 'Administration' && $_user['admin'] != 1): ?>
 
-      <?php elseif($level['title'] == 'City Portal' && !isset($_SESSION['city'])): ?>
+      <?php elseif($level['title'] == 'City Portal' && !$_city): ?>
 
         <div class="w3-bar-item w3-text-gray bm-caps"><?=$level['title']?></div>
         <button
