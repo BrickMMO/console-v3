@@ -4,6 +4,8 @@ security_check();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
+
+    die();
     
     // Basic serverside validation
     if (
@@ -30,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 define('APP_NAME', $_SESSION['city']['name']);
 
-define('PAGE_TITLE', 'City Profile');
+define('PAGE_TITLE', 'Members');
 define('PAGE_SELECTED_SECTION', '');
 define('PAGE_SELECTED_SUB_PAGE', '');
 
@@ -57,11 +59,11 @@ $city = city_fetch($_SESSION['city']['id']);
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
-    City Profile
+    Members
 </p>
 <hr />
 
-<h2>City Profile</h2>
+<h2>Members</h2>
 
 <form
     method="post"

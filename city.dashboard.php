@@ -32,7 +32,7 @@ include('templates/main_header.php');
         <?=$_SESSION['city']['name']?>
     </h1>
 
-    <p>Manage your BrickMMO city profile, members, and .</p>
+    <p>Manage your BrickMMO city profile, image, and members.</p>
 
 </div>
 
