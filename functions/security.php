@@ -12,7 +12,10 @@ function security_is_logged_in()
         if(!$user) return false;
         else if($user['password'] != security_decrypt($_COOKIE['hash_string'])) return false;
 
-        if(!isset($_SESSION['user'])) security_set_user_session($user['id']);
+        if(!isset($_SESSION['user'])) 
+        {
+            security_set_user_session($user['id']);
+        }
 
         security_extend_cookie();
 
@@ -32,7 +35,6 @@ function security_is_logged_in()
 
             if(password_verify($user['session_id'], $_SESSION['user']['session_id']))
             {
-
                 return true;
             }
             else
@@ -104,7 +106,7 @@ function security_check()
 
     if(!security_is_logged_in())
     {
-        header_redirect('/login');
+        header_redirect(ENV_ACCOUNT_DOMAIN.'/login');
     }
 
     $id = security_decrypt($_COOKIE['hash_id']);

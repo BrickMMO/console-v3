@@ -35,7 +35,7 @@ $bricksum_words_generated = setting_fetch('BRICKSUM_WORDS_GENERATED');
     Bricksum
 </h1>
 <p>
-    <a href="/console/dashboard">Dashboard</a> / 
+    <a href="/city/dashboard">Dashboard</a> / 
     Bricksum
 </p>
 <hr>
