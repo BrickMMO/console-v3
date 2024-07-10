@@ -3,7 +3,7 @@
 </p>
 
 <p>
-    <a href="<?=ENV_ACCOUNT_DOMAIN?>/action/invite/hash/<?=$data['invite_hash']?>">
-        <?=ENV_ACCOUNT_DOMAIN?>/action/invite/hash/<?=$data['invite_hash']?>
+    <a href="<?=ENV_CONSOLE_DOMAIN?>/action/invite/hash/<?=$data['invite_hash']?>">
+        <?=ENV_CONSOLE_DOMAIN?>/action/invite/hash/<?=$data['invite_hash']?>
     </a>
 </p>
