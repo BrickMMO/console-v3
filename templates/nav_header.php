@@ -63,7 +63,7 @@
             <button class="w3-button" onclick="w3_sidebar_toggle(event)">
                 <i class="fa-solid fa-bars"></i>
             </button>
-            <a href="<?=ENV_CONSOLE_DOMAIN?>/console/dashboard" class="w3-margin-left" onclick="prevent(event)"
+            <a href="<?=ENV_CONSOLE_DOMAIN?>/console/dashboard" onclick="prevent(event)"
             ><img
                 src="https://cdn.brickmmo.com/images@1.0.0/brickmmo-logo-coloured-horizontal.png"
                 style="height: 35px"
