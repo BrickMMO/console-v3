@@ -1,9 +1,11 @@
+<?php if($_city): ?>
+
 <?php
 
 $query = 'SELECT cities.*
     FROM cities
     INNER JOIN city_user ON cities.id = city_user.city_id
-    WHERE city_user.user_id = '.$_SESSION['user']['id'].'
+    WHERE city_user.user_id = '.$_user['id'].'
     AND deleted_at IS NULL
     ORDER BY name';
 $result = mysqli_query($connect, $query);
@@ -38,7 +40,7 @@ $result = mysqli_query($connect, $query);
         <?php while($record = mysqli_fetch_assoc($result)): ?>
             <tr>
                 <td>
-                    <?php if($_SESSION['city']['id'] == $record['id']): ?>
+                    <?php if($_city['id'] == $record['id']): ?>
                         <i class="fa-solid fa-check"></i>
                     <?php endif; ?>
                 </td>
@@ -65,3 +67,5 @@ $result = mysqli_query($connect, $query);
     </footer>
   </div>
 </div>
+
+<?php endif; ?>

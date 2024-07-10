@@ -68,7 +68,7 @@ $navigation = navigation_array();
 
     <?php foreach($navigation as $level): ?>
 
-      <?php if($level['title'] == 'Administration' && $_SESSION['user']['admin'] != 1): ?>
+      <?php if($level['title'] == 'Administration' && $_user['admin'] != 1): ?>
 
       <?php elseif($level['title'] == 'City Portal' && !isset($_SESSION['city'])): ?>
 

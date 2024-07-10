@@ -1,15 +1,15 @@
 <?php
 
-function user_avatar()
+function user_avatar($id)
 {
-    return (
-        isset($_SESSION['user']['avatar']) &&
-        $_SESSION['user']['avatar']) ? $_SESSION['user']['avatar'] : '/images/no_avatar.png';
+    $user = user_fetch($id);
+    return $user['avatar'] ? $user['avatar'] : '/images/no_avatar.png';
 }
 
-function user_name()
+function user_name($id)
 {
-    return $_SESSION['user']['first'].' '.$_SESSION['user']['last'];
+    $user = user_fetch($id);
+    return $user['first'].' '.$user['last'];
 }
 
 function user_fetch($identifier)

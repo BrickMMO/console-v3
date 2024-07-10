@@ -107,7 +107,7 @@ $city = city_fetch($_SESSION['city']['id']);
         Length <span id="length-error" class="w3-text-red"></span>
     </label>
 
-    <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="validateMainForm();">
+    <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="return validateMainForm();">
         <i class="fa-solid fa-pen fa-padding-right"></i>
         Update Profile
     </button>

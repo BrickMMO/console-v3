@@ -85,7 +85,7 @@ $result = mysqli_query($connect, $query);
         <tr>
             <td>
                 <img
-                    src="<?=user_avatar();?>"
+                    src="<?=user_avatar($record['id']);?>"
                     style="height: 25px"
                     class="w3-circle"
                 />

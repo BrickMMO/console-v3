@@ -5,7 +5,8 @@ use \SendGrid\Mail\Mail;
 function email_send(
     $to_email,
     $to_name,
-    $message
+    $message,
+    $subject
 )
 {
 
@@ -18,7 +19,7 @@ function email_send(
 
     $email = new Mail();
     $email->setFrom(SENDGRID_FROM_EMAIL, SENDGRID_FROM_NAME);
-    $email->setSubject('Reset Password');
+    $email->setSubject($subject);
     $email->addTo($to_email, $to_name);
     $email->addContent("text/html", $message);
     

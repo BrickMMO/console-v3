@@ -14,6 +14,15 @@ include('includes/session.php');
 include('functions/functions.php');
 
 /**
+ * Fetch city and user if applicable.
+ */ 
+if(isset($_SESSION['user'])) $_user = user_fetch($_SESSION['user']['id']);
+else $_user = false;
+
+if(isset($_SESSION['city'])) $_city = city_fetch($_SESSION['city']['id']);
+else $_city = false;
+
+/**
  * Convert standard format URL parameters to slashes.
  */ 
 if(strpos($_SERVER['REQUEST_URI'], '?'))

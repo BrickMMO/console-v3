@@ -51,15 +51,15 @@ function validate_blank($value)
  */
 function validate_github($github)
 {
-    return !preg_match('/^[a-zA-Z0-9\-]{6,39}$/', $github);
+    return preg_match('/^[a-zA-Z0-9\-]{6,39}$/', $github);
 }
 
 /*
- * Basic validation for a GitHub username
+ * Basic validation for a number
  */
 function validate_number($value)
 {
-    return !preg_match('/\D+/', $value);
+    return preg_match('/^[0-9]+$/', $value);
 }
 
 /*

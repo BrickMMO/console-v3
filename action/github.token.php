@@ -32,15 +32,13 @@ $avatar = image_to_bas64($github_user['avatar_url']);
 /*
  * Check if logged in user matches GitHub email
  */
-if(isset($_SESSION['user']))
+if($_user)
 {
-
-    $user = user_fetch($_SESSION['user']['id']);
 
     $query = 'SELECT *
         FROM users
         WHERE github_username = "'.addslashes($github_user['login']).'"
-        AND id != '.$user['id'].'
+        AND id != '.$_user['id'].'
         LIMIT 1';
     $result = mysqli_query($connect, $query);
 
@@ -52,7 +50,7 @@ if(isset($_SESSION['user']))
 
     foreach($emails as $key => $email)
     {
-        if($user['email'] == $email['email'])
+        if($_user['email'] == $email['email'])
         {
             $email = $email['email'];
             break;
@@ -73,8 +71,8 @@ if(isset($_SESSION['user']))
         LIMIT 1';
     mysqli_query($connect, $query);
 
-    security_set_user_session($user['id']);
-    security_set_user_cookie($user['id']);
+    security_set_user_session($_user['id']);
+    security_set_user_cookie($_user['id']);
 
     message_set('GitHub Success', 'Your GitHub account has been connected.');
     header_redirect('/account/dashboard');
@@ -171,7 +169,7 @@ include(__DIR__.'/templates/email_register.php');
 $message = ob_get_contents();
 ob_end_clean();
 
-email_send($user['email'], $user['first'].' '.$user['last'], $message, 'Email Verification');
+email_send($user['email'], user_name($user['id']), $message, 'Email Verification');
 
 security_set_user_session($user['id']);
 security_set_user_cookie($user['id']);

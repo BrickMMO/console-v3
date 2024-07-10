@@ -1,4 +1,3 @@
-
 <!-- TOP NAVIGATION -->
 
 <script>
@@ -92,7 +91,7 @@
         <div class="w3-col s6 w3-right-align">
             
             <img
-                src="<?=user_avatar();?>"
+                src="<?=user_avatar($_user['id']);?>"
                 style="height: 35px"
                 class="w3-circle"
                 onclick="return toggleAvatarOptions(event)"
@@ -107,18 +106,18 @@
 
 <div class="w3-card-4 w3-border" style="max-width: 300px; position: fixed; top: 68px; right: 10px; display: none; z-index: 120;" id="avatar-options">
     
-    <img src="<?=user_avatar();?>" alt="Alps" style="max-width: 100%;">
+    <img src="<?=user_avatar($_user['id']);?>" alt="Alps" style="max-width: 100%;">
 
     <div class="w3-container w3-white">
         <p>
             You are logged in as 
-            <a href="<?=ENV_ACCOUNT_DOMAIN?>/account/dashboard"><?=user_name()?></a>
+            <a href="<?=ENV_ACCOUNT_DOMAIN?>/account/dashboard"><?=user_name($_user['id'])?></a>
         </p>
-        <?php if($_SESSION['user']['github_username']): ?>
+        <?php if($_user['github_username']): ?>
             <p>
-                <a href="https://github.com/<?=$_SESSION['user']['github_username']?>">
+                <a href="https://github.com/<?=$_user['github_username']?>">
                     <i class="fa-brands fa-github fa-padding-right"></i>
-                    <?=$_SESSION['user']['github_username']?>
+                    <?=$_user['github_username']?>
                 </a>
             </p>
         <?php endif; ?>
