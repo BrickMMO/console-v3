@@ -1,4 +1,10 @@
-Rewrite engine on
-
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^.*$ /index.php [L,QSA]
+
+<Files .env>
+order allow,deny
+Deny from all
+</Files>
