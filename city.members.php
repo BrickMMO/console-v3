@@ -45,6 +45,13 @@ include('templates/message.php');
 
 $city = city_fetch($_SESSION['city']['id']);
 
+$query = 'SELECT users.*
+    FROM users
+    INNER JOIN city_user ON users.id = city_user.user_id
+    WHERE city_user.city_id = '.$_SESSION['city']['id'].'
+    ORDER BY last,first';
+$result = mysqli_query($connect, $query);
+
 ?>
 
 <!-- CONTENT -->
@@ -65,89 +72,58 @@ $city = city_fetch($_SESSION['city']['id']);
 
 <h2>Members</h2>
 
-<form
-    method="post"
-    novalidate
-    id="main-form"
+<table class="w3-table w3-bordered w3-striped w3-margin-bottom">
+    <tr>
+        <th class="bm-table-icon"></th>
+        <th class="bm-table-icon"></th>
+        <th>Name</th>
+        <th>GitHub</th>
+        <th class="bm-table-icon"></th>
+    </tr>
+
+    <?php while($record = mysqli_fetch_assoc($result)): ?>
+        <tr>
+            <td>
+                <img
+                    src="<?=user_avatar();?>"
+                    style="height: 25px"
+                    class="w3-circle"
+                />
+            </td>
+            <td>
+                <?php if($record['city_id'] == $_SESSION['city']['id']): ?>
+                    <i class="fa-solid fa-lock"></i>
+                <?php endif; ?>
+            </td>
+            <td>
+                <?=$record['first']?> <?=$record['last']?>
+            </td>
+            <td>
+                <?php if($record['github_username']): ?>
+                    <a href="https://github.com/<?=$record['github_username']?>">
+                        <i class="fa-brands fa-github"></i>
+                        <?=$record['github_username']?>
+                    </a>
+                <?php endif; ?>
+            </td>
+            <td>
+                <?php if($record['city_id'] != $_SESSION['city']['id']): ?>
+                    <a href="/city/uninvite/user/<?=$record['id']?>">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endwhile; ?>
+
+</table>
+
+<a
+    href="/city/invite/"
+    class="w3-button w3-white w3-border"
 >
-
-    <input  
-        name="name" 
-        class="w3-input w3-border" 
-        type="text" 
-        id="name" 
-        autocomplete="off"
-        value="<?=$city['name']?>"
-    />
-    <label for="name" class="w3-text-gray">
-        Name <span id="name-error" class="w3-text-red"></span>
-    </label>
-
-    <input 
-        name="width" 
-        class="w3-input w3-margin-top w3-border" 
-        type="number" 
-        id="width" 
-        autocomplete="off"
-        value="<?=$city['width']?>"
-    />
-    <label for="width" class="w3-text-gray">
-        <i class="fa-solid fa-ruler"></i>
-        Width <span id="width-error" class="w3-text-red"></span>
-    </label>
-
-    <input 
-        name="length" 
-        class="w3-input w3-border w3-margin-top" 
-        type="number" 
-        id="length" 
-        autocomplete="off" 
-        value="<?=$city['length']?>"
-    />  
-    <label for="length" class="w3-text-gray">
-        <i class="fa-solid fa-ruler"></i>
-        Length <span id="length-error" class="w3-text-red"></span>
-    </label>
-
-    <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="validateMainForm();">
-        <i class="fa-solid fa-pen fa-padding-right"></i>
-        Update Profile
-    </button>
-</form>
-
-<script>
-
-    function validateMainForm() {
-        let errors = 0;
-
-        let name = document.getElementById("name");
-        let name_error = document.getElementById("name-error");
-        name_error.innerHTML = "";
-        if (name.value == "") {
-            name_error.innerHTML = "(name is required)";
-            errors++;
-        }
-
-        let width = document.getElementById("width");
-        let width_error = document.getElementById("width-error");
-        width_error.innerHTML = "";
-        if (width.value == "") {
-            width_error.innerHTML = "(width is required)";
-            errors++;
-        }
-
-        let length = document.getElementById("length");
-        let length_error = document.getElementById("length-error");
-        length_error.innerHTML = "";
-        if (length.value == "") {
-            length_error.innerHTML = "(length is required)";
-            errors++;
-        }
-
-        if (errors) return false;
-    }
-
-</script>
+    <i class="fa-solid fa-envelope fa-padding-right"></i> Invite New Member
+</a>
     
 <?php
 

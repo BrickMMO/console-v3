@@ -43,7 +43,8 @@ $result = mysqli_query($connect, $query);
                     <?php endif; ?>
                 </td>
                 <td>
-                    <a href="/action/city/select/id/<?=$record['id']?>"><?=$record['name']?></a></td>
+                    <a href="/action/city/select/id/<?=$record['id']?>"><?=$record['name']?></a>
+                </td>
                 <td></td>
             </tr>
         <?php endwhile; ?>
