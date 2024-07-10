@@ -2,7 +2,7 @@
 
 security_check();
 
-define('APP_NAME', 'My Account');
+define('APP_NAME', $_SESSION['city']['name']);
 
 define('PAGE_TITLE', 'Dashboard');
 define('PAGE_SELECTED_SECTION', '');
@@ -48,6 +48,12 @@ include('templates/main_header.php');
         <a href="<?=ENV_CONSOLE_DOMAIN?>/city/image" class="w3-block">
             <i class="fa-solid fa-image-portrait fa-padding-right w3-text-dark-grey"></i>
             Image
+            <i class="fa-solid fa-chevron-right fa-pull-right w3-text-dark-grey" class="w3-display-right"></i>
+        </a>
+        <hr>
+        <a href="<?=ENV_CONSOLE_DOMAIN?>/city/members" class="w3-block">
+            <i class="fa-solid fa-user fa-padding-right w3-text-dark-grey"></i>
+            Members
             <i class="fa-solid fa-chevron-right fa-pull-right w3-text-dark-grey" class="w3-display-right"></i>
         </a>
     </div>
