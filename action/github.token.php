@@ -171,7 +171,7 @@ include(__DIR__.'/templates/email_register.php');
 $message = ob_get_contents();
 ob_end_clean();
 
-email_send($user['email'], $user['first'].' '.$user['last'], $message);
+email_send($user['email'], $user['first'].' '.$user['last'], $message, 'Email Verification');
 
 security_set_user_session($user['id']);
 security_set_user_cookie($user['id']);
