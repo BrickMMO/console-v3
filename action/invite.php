@@ -3,12 +3,10 @@
 if(!isset($_GET['hash']) or !invite_fetch($_GET['hash']))
 {
     message_set('Hash Error', 'There was an error with the password reset link, please try again.', 'red');
-    header_redirect('/forgot');
+    header_redirect(ENV_ACCOUNT_DOMAIN.'/login');
 }
 
-$invite = invite_fetch($_GET['hash']);
-
-$_SESSION['invite'] = $invite;
+$_SESSION['invite'] = $_GET['hash'];
 
 if($_user)
 {
@@ -17,6 +15,5 @@ if($_user)
 
 }
 
-message_set('City Invite', 'Login or register to accept invitation.', 'green');
+message_set('City Invite', 'Login or register to accept invitation.');
 header_redirect(ENV_ACCOUNT_DOMAIN.'/login');
-    
