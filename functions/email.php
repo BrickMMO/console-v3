@@ -29,13 +29,12 @@ function email_send(
         
         $response = $sendgrid->send($email);
 
-        /*
-        echo '<pre>';
-        print $response->statusCode() . "\n";
-        print_r($response->headers());
-        print $response->body() . "\n";
-        echo '</pre>';
-        */
+        unset($_SESSION['email']);
+
+        $_SESSION['email'] = array(
+            'status_code' => $response->statusCode(),
+            'headers' => $response->headers(),
+        );
 
     } catch (Exception $e) {
 
