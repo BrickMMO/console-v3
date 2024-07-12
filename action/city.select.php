@@ -1,5 +1,7 @@
 <?php
 
+security_check();
+
 $_city = city_fetch($_GET['id']);
 
 $query = 'UPDATE users SET

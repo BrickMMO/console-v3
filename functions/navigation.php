@@ -8,6 +8,24 @@ function navigation_array($selected = false)
             'title' => 'City Portal',
             'sections' => [
                 [
+                    'title' => 'Geography',
+                    'id' => 'control',
+                    'pages' => [
+                        [
+                            'icon' => 'bm-roadview',
+                            'url' => '/maps/dashboard',
+                            'title' => 'Maps',
+                        ],[
+                            'icon' => 'bm-roadview',
+                            'url' => '/roadview/dashboard',
+                            'title' => 'Roadview',
+                        ],[
+                            'icon' => 'bm-roadview',
+                            'url' => '/maps/places',
+                            'title' => 'Places',
+                        ]
+                    ],
+                ],[
                     'title' => 'Control',
                     'id' => 'control',
                     'pages' => [
@@ -29,10 +47,6 @@ function navigation_array($selected = false)
                             'icon' => 'bm-navigation',
                             'url' => '/navigation/dashboard',
                             'title' => 'Navigation',
-                        ],[
-                            'icon' => 'bm-roadview',
-                            'url' => '/roadview/dashboard',
-                            'title' => 'Roadview',
                         ],[
                             'icon' => 'bm-tracks',
                             'url' => '/tracks/dashboard',

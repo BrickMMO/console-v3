@@ -12,7 +12,11 @@ function security_is_logged_in()
         if(!$user) return false;
         else if($user['password'] != security_decrypt($_COOKIE['hash_string'])) return false;
 
-        if(!isset($_SESSION['user'])) security_set_user_session($id);
+        if(!isset($_SESSION['user']))
+        {
+            security_set_user_session($id);
+            header_redirect($_SERVER["REQUEST_URI"]);
+        }
 
         security_extend_cookie();
 
