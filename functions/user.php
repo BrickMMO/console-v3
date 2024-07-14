@@ -31,3 +31,41 @@ function user_fetch($identifier)
     else return false;
 
 }
+
+function user_set_city($user_id, $city_id = false)
+{
+
+    global $connect; 
+    
+    if($city_id)
+    {
+
+        $query = 'UPDATE users SET
+            city_id = '.$city_id.'
+            WHERE id = '.$user_id.'
+            LIMIT 1';
+        mysqli_query($connect, $query);
+
+    }
+    else
+    {
+
+        $query = 'SELECT cities.id
+            FROM cities
+            INNER JOIN city_user 
+            ON city_user.city_id = cities.id
+            WHERE city_user.user_id = '.$user_id.'
+            AND deleted_at IS NULL
+            ORDER BY created_at DESC
+            LIMIT 1';
+        $result = mysqli_query($connect, $query);
+
+        if(mysqli_num_rows($result))
+        {
+            $record = mysqli_fetch_assoc($result);
+            user_set_city($user_id, $record['id']);
+        }
+
+    }
+
+}

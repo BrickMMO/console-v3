@@ -23,7 +23,8 @@ $result = mysqli_query($connect, $query);
       <div class="w3-row">
         <div class="w3-col s6">
           <p style="margin-block-end: 8px; margin-block-start: 8px">
-            <i class="fa-solid fa-city"></i> Select a City
+            <i class="fa-solid fa-city fa-padding-right"></i> 
+            Select a City
           </p>
         </div>
         <div class="w3-col s6 w3-right-align"></div>

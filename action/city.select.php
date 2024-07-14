@@ -4,11 +4,7 @@ security_check();
 
 $_city = city_fetch($_GET['id']);
 
-$query = 'UPDATE users SET
-    city_id = '.$_city['id'].'
-    WHERE id = '.$_user['id'].'
-    LIMIT 1';
-mysqli_query($connect, $query);
+user_set_city($_user['id'], $_city['id']);
 
 security_set_user_session($_user['id']);
 

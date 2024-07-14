@@ -72,6 +72,7 @@ include('templates/message.php');
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
+    <a href="/city/members">Members</a> / 
     Invite Member
 </p>
 <hr />

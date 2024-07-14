@@ -2,30 +2,31 @@
 
 security_check();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+if (isset($_GET['uninvite'])) 
 {
 
-    die();
-    
-    // Basic serverside validation
-    if (
-        !validate_blank($_POST['name']) || 
-        !validate_number($_POST['width']) || 
-        !validate_number($_POST['length']))
+    if(!$user = user_fetch($_GET['uninvite']))
     {
-        message_set('Login Error', 'There was an error with your profile information.', 'red');
-        header_redirect('/city/profile');
+        message_set('Delete Error', 'There was an error removing a member from the city.', 'red');
+        header_redirect('/city/members');
     }
 
-    $query = 'UPDATE cities SET
-        name = "'.addslashes($_POST['name']).'",
-        width = "'.addslashes($_POST['width']).'",
-        length = "'.addslashes($_POST['length']).'"
-        WHERE id = '.$_city['id'].'
+    $query = 'DELETE FROM city_user 
+        WHERE user_id = '.$user['id'].'
+        AND city_id = '.$_city['id'].'
         LIMIT 1';
     mysqli_query($connect, $query);
 
-    message_set('Success', 'Your city profile has been updated.');
+    $query = 'UPDATE users SET
+        city_id = NULL
+        WHERE id = '.$user['id'].'
+        AND city_id = '.$_city['id'].'
+        LIMIT 1';
+    mysqli_query($connect, $query);
+
+    user_set_city();
+
+    message_set('Success', 'Member has been removed from city.');
     header_redirect('/city/dashboard');
     
 }
@@ -43,7 +44,7 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$query = 'SELECT users.*
+$query = 'SELECT users.*,city_user.*
     FROM users
     INNER JOIN city_user ON users.id = city_user.user_id
     WHERE city_user.city_id = '.$_city['id'].'
@@ -83,7 +84,7 @@ $result = mysqli_query($connect, $query);
         <tr>
             <td>
                 <img
-                    src="<?=user_avatar($record['id']);?>"
+                    src="<?=user_avatar($record['user_id']);?>"
                     style="height: 25px"
                     class="w3-circle"
                 />
@@ -105,8 +106,8 @@ $result = mysqli_query($connect, $query);
                 <?php endif; ?>
             </td>
             <td>
-                <?php if($record['city_id'] != $_city['id']): ?>
-                    <a href="/city/uninvite/user/<?=$record['id']?>">
+                <?php if($record['user_id'] != $_user['id'] && $record['user_id'] != $_city['user_id']): ?>
+                    <a href="#" onclick="return confirmModal('Are you sure you want to remove <?=user_name($_user['id'])?> from <?=$_city['name']?>?', '/city/members/uninvite/<?=$record['user_id']?>');">
                         <i class="fa-solid fa-xmark"></i>
                     </a>
                 <?php endif; ?>
