@@ -1,6 +1,7 @@
 <?php
 
 security_check();
+admin_check();
 
 define('APP_NAME', 'Bricksum');
 

@@ -1,6 +1,7 @@
 <?php
 
 security_check();
+city_check();
 
 if (isset($_GET['uninvite'])) 
 {

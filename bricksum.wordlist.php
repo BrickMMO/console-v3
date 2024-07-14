@@ -1,6 +1,7 @@
 <?php
 
 security_check();
+admin_check();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {

@@ -24,3 +24,16 @@ function city_fetch($identifier)
     else return false;
 
 }
+
+function city_check()
+{
+
+    global $_city, $_user;
+
+    if(!$_city)
+    {
+        user_set_city($_user['id']);
+        header_redirect(ENV_ACCOUNT_DOMAIN.'/account/dashboard');
+    }
+
+}

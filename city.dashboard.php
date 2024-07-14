@@ -1,6 +1,7 @@
 <?php
 
 security_check();
+city_check();
 
 define('APP_NAME', $_city['name']);
 
