@@ -94,7 +94,7 @@ function security_set_user_session($id)
         $_SESSION['city']['id'] = $city['id'];
         $_SESSION['city']['name'] = $city['name'];
         $_SESSION['city']['width'] = $city['width'];
-        $_SESSION['city']['length'] = $city['length'];
+        $_SESSION['city']['height'] = $city['height'];
         $_SESSION['city']['image'] = $city['image'];
     }
 

@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     if (
         !validate_blank($_POST['name']) || 
         !validate_number($_POST['width']) || 
-        !validate_number($_POST['length']))
+        !validate_number($_POST['height']))
     {
         message_set('City Profile Error', 'There was an error with your city profile information.', 'red');
         header_redirect('/city/profile');
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $query = 'UPDATE cities SET
         name = "'.addslashes($_POST['name']).'",
         width = "'.addslashes($_POST['width']).'",
-        length = "'.addslashes($_POST['length']).'"
+        height = "'.addslashes($_POST['height']).'"
         WHERE id = '.$_city['id'].'
         LIMIT 1';
     mysqli_query($connect, $query);
@@ -96,16 +96,16 @@ $city = city_fetch($_city['id']);
     </label>
 
     <input 
-        name="length" 
+        name="height" 
         class="w3-input w3-border w3-margin-top" 
         type="number" 
-        id="length" 
+        id="height" 
         autocomplete="off" 
-        value="<?=$city['length']?>"
+        value="<?=$city['height']?>"
     />  
-    <label for="length" class="w3-text-gray">
+    <label for="height" class="w3-text-gray">
         <i class="fa-solid fa-ruler"></i>
-        Length <span id="length-error" class="w3-text-red"></span>
+        Height <span id="height-error" class="w3-text-red"></span>
     </label>
 
     <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="return validateMainForm();">
@@ -135,11 +135,11 @@ $city = city_fetch($_city['id']);
             errors++;
         }
 
-        let length = document.getElementById("length");
-        let length_error = document.getElementById("length-error");
-        length_error.innerHTML = "";
-        if (length.value == "") {
-            length_error.innerHTML = "(length is required)";
+        let height = document.getElementById("height");
+        let height_error = document.getElementById("height-error");
+        height_error.innerHTML = "";
+        if (height.value == "") {
+            height_error.innerHTML = "(height is required)";
             errors++;
         }
 

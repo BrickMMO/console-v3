@@ -9,12 +9,39 @@ function navigation_array($selected = false)
             'sections' => [
                 [
                     'title' => 'Geography',
-                    'id' => 'control',
+                    'id' => 'geography',
                     'pages' => [
                         [
                             'icon' => 'bm-roadview',
                             'url' => '/maps/dashboard',
                             'title' => 'Maps',
+                            'sub-pages' => [
+                                [
+                                    'title' => 'Dashboard',
+                                    'url' => '/maps/dashboard',
+                                    'colour' => 'red'
+                                ],[
+                                    'title' => 'Modify Map Squares',
+                                    'url' => '/maps/squares',
+                                    'colour' => 'red'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Visit BrickMMO Maps',
+                                    'url' => 'https://maps.brickmmo.com',
+                                    'colour' => 'orange'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Uptime Report',
+                                    'url' => '/uptime/maps',
+                                    'colour' => 'orange'
+                                ],[
+                                    'title' => 'Stats Report',
+                                    'url' => '/uptime/maps',
+                                    'colour' => 'orange'
+                                ]
+                            ]   
                         ],[
                             'icon' => 'bm-roadview',
                             'url' => '/roadview/dashboard',
