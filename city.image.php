@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     if (
         !validate_image($_FILES['image']))
     {
-        message_set('Image Error', 'There was an error with your uploaded image.', 'red');
+        message_set('Image Error', 'There was an error with your uploaded image. Image may be wrong type or size.', 'red');
         header_redirect('/city/image');
     }
 
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         LIMIT 1';
     mysqli_query($connect, $query);
     
-    message_set('Success', 'Your image has been updated.');
+    message_set('Image Success', 'Your profile image has been updated.');
     header_redirect('/city/dashboard');
     
 }

@@ -13,5 +13,5 @@ mysqli_query($connect, $query);
 
 security_set_user_session($_user['id']);
 
-message_set('Success', 'Your account has disconnected from your GitHub account.');
+message_set('Disconnection Success', 'Your account has disconnected from your GitHub account.');
 header_redirect('/account/dashboard');

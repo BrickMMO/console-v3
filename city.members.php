@@ -8,7 +8,7 @@ if (isset($_GET['uninvite']))
 
     if(!$user = user_fetch($_GET['uninvite']))
     {
-        message_set('Delete Error', 'There was an error removing a member from the city.', 'red');
+        message_set('Delete Error', 'There was an error removing this member from the city.', 'red');
         header_redirect('/city/members');
     }
 
@@ -27,7 +27,7 @@ if (isset($_GET['uninvite']))
 
     user_set_city();
 
-    message_set('Success', 'Member has been removed from city.');
+    message_set('Delete Success', 'Member has been removed from this city.');
     header_redirect('/city/dashboard');
     
 }

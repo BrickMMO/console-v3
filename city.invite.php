@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         !validate_blank($_POST['name']) &&
         !validate_email($_POST['email']))
     {
-        message_set('Invite Error', 'There was an error with the provided eamil address.', 'red');
+        message_set('Invite Error', 'There was an error with the provided invitation email address.', 'red');
         header_redirect('/city/invite');
     }
 
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
     email_send($_POST['email'], $_POST['name'], $message, 'Invitation to BrickMMO');
 
-    message_set('Success', 'Your city invite has been sent.');
+    message_set('Invite Success', 'Your city invitation has been sent to your new member.');
     header_redirect('/city/dashboard');
     
 }

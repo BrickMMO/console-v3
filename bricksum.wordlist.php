@@ -10,13 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     if (
         !validate_blank($_POST['bricksum_wordlist']))
     {
-        message_set('Word List Error', 'There was an error with your word list.', 'red');
+        message_set('Word List Error', 'There was an error saving your workd list.', 'red');
         header_redirect('/bricksum/wordlist');
     }
 
     setting_update('BRICKSUM_WORDLIST', $_POST['bricksum_wordlist']);
 
-    message_set('Success', 'Word list has been updated.');
+    message_set('Word List Success', 'Word list has been updated.');
     header_redirect('/bricksum/wordlist');
     
 }

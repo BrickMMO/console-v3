@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         !validate_number($_POST['width']) || 
         !validate_number($_POST['length']))
     {
-        message_set('Login Error', 'There was an error with your profile information.', 'red');
+        message_set('City Profile Error', 'There was an error with your city profile information.', 'red');
         header_redirect('/city/profile');
     }
 
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         LIMIT 1';
     mysqli_query($connect, $query);
 
-    message_set('Success', 'Your city profile has been updated.');
+    message_set('City Profile Success', 'Your city profile has been updated.');
     header_redirect('/city/dashboard');
     
 }

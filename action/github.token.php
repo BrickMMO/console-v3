@@ -44,7 +44,7 @@ if($_user)
 
     if(mysqli_num_rows($result))
     {
-        message_set('GitHub Error', 'There was an error authenticating your GitHub account. The GitHub account '.$github_user['login'].' is already associated to another BrickMMO account.', 'red');
+        message_set('GitHub Error', 'The GitHub account '.$github_user['login'].' is already associated to another BrickMMO account.', 'red');
         header_redirect('/account/dashboard');
     }
 
@@ -59,7 +59,7 @@ if($_user)
 
     if(!isset($email))
     {
-        message_set('GitHub Error', 'The account you are currently logged in as and the GitHub account do not have matching emails.');
+        message_set('GitHub Error', 'The account you are currently logged in as and the GitHub account do not have matching emails. To resolve this add your BrickMMO email address to your GitHub account. ');
         header_redirect('/account/dashboard');
     }
 
@@ -74,7 +74,7 @@ if($_user)
     security_set_user_session($_user['id']);
     security_set_user_cookie($_user['id']);
 
-    message_set('GitHub Success', 'Your GitHub account has been connected.');
+    message_set('GitHub Success', 'Your GitHub account has been connected to your BrickMMO account.');
     header_redirect('/account/dashboard');
 
 }
@@ -117,7 +117,7 @@ if($user)
     security_set_user_session($user['id']);
     security_set_user_cookie($user['id']);
 
-    message_set('Login Success', 'You have been logged in.');
+    message_set('GitHub Success', 'You have been logged in using your GitHub account.');
     header_redirect('/account/dashboard');
 
 }
@@ -174,5 +174,5 @@ email_send($user['email'], user_name($user['id']), $message, 'Email Verification
 security_set_user_session($user['id']);
 security_set_user_cookie($user['id']);
 
-message_set('Success', 'Your account has been created and you have been logged in. You will receive an email with a link to confirm your email address.');
+message_set('GitHub Success', 'Your BrickMMO account has been created and you have been logged in. You will receive an email with a link to confirm your email address.');
 header_redirect('/account/dashboard');
