@@ -17,7 +17,8 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$squares = city_get_squares($_city['id']);
+$squares = squares_fetch_all($_city['id']);
+$width = round(100/$_city['width'],2);
 
 ?>
 
@@ -37,32 +38,29 @@ $squares = city_get_squares($_city['id']);
     Maps
 </p>
 <hr>
-<h2>Map Squares</h2>
-<div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
 
-    <?php for($row = 0; $row < $_city['height']; $row ++): ?>
-    
-        <div class="w3-cell-row">
+<?php for($row = 0; $row < $_city['height']; $row ++): ?>
 
-            <?php for($col = 0; $col < $_city['width']; $col ++): ?>
+    <div class="w3-cell-row">
 
-                <div class="w3-cell w3-border">
-                    <?=$row?> - <?=$col?>
-                </div>
+        <?php for($col = 0; $col < $_city['width']; $col ++): ?>
 
-            <?php endfor; ?>    
+            <div class="w3-cell w3-border w3-<?php echo ($squares[$row][$col]['type'] == 'water') ? 'blue' : 'brown'; ?>" 
+                style="width: <?=$width?>%; height: 35px; cursor: pointer;"
+                onclick="location.href='/maps/square/<?=$squares[$row][$col]['id']?>';">
+            </div>
 
-        </div>
+        <?php endfor; ?>    
 
-    <?php endfor; ?>
+    </div>
 
-</div>
+<?php endfor; ?>
 
 <a
-    href="/maps/squares"
-    class="w3-button w3-white w3-border"
+    href="/maps/quick"
+    class="w3-button w3-white w3-border w3-margin-top"
 >
-    <i class="fa-solid fa-pen-to-square fa-padding-right"></i> Modify Map Squares
+    <i class="fa-solid fa-pen-to-square fa-padding-right"></i> Map Quick Edit
 </a>
 
 <hr />

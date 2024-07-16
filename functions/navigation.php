@@ -21,8 +21,8 @@ function navigation_array($selected = false)
                                     'url' => '/maps/dashboard',
                                     'colour' => 'red'
                                 ],[
-                                    'title' => 'Modify Map Squares',
-                                    'url' => '/maps/squares',
+                                    'title' => 'Map Quick Edit',
+                                    'url' => '/maps/quick',
                                     'colour' => 'red'
                                 ],[
                                     'br' => '---'
