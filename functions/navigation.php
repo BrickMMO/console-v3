@@ -188,6 +188,33 @@ function navigation_array($selected = false)
                             'icon' => 'bm-colours',
                             'url' => '/colours/dashboard',
                             'title' => 'Colours',
+                            'sub-pages' => [
+                                [
+                                    'title' => 'Dashboard',
+                                    'url' => '/colours/dashboard',
+                                    'colour' => 'red'
+                                ],[
+                                    'title' => 'Import Colours',
+                                    'url' => '/colours/import',
+                                    'colour' => 'red'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Visit Colors App',
+                                    'url' => 'https://colours.brickmmo.com',
+                                    'colour' => 'orange'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Uptime Report',
+                                    'url' => '/uptime/colours',
+                                    'colour' => 'orange'
+                                ],[
+                                    'title' => 'Stats Report',
+                                    'url' => '/uptime/stats',
+                                    'colour' => 'orange'
+                                ]
+                            ]
                         ],[
                             'icon' => 'bm-parts',
                             'url' => '/parts/dashboard',
