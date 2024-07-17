@@ -227,6 +227,41 @@ function navigation_array($selected = false)
                             'icon' => 'bm-media',
                             'url' => '/media/dashboard',
                             'title' => 'Media',
+                            'sub-pages' => [
+                                [
+                                    'title' => 'Dashboard',
+                                    'url' => '/media/dashboard',
+                                    'colour' => 'red'
+                                ],[
+                                    'title' => 'Images',
+                                    'url' => '/media/images',
+                                    'colour' => 'red'
+                                ],[
+                                    'title' => 'Videos',
+                                    'url' => '/media/videos',
+                                    'colour' => 'red'
+                                ],[
+                                    'title' => 'Tags',
+                                    'url' => '/media/tags',
+                                    'colour' => 'red'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Visit BrickMMO Media',
+                                    'url' => 'https://media.brickmmo.com',
+                                    'colour' => 'orange'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Uptime Report',
+                                    'url' => '/uptime/maps',
+                                    'colour' => 'orange'
+                                ],[
+                                    'title' => 'Stats Report',
+                                    'url' => '/uptime/maps',
+                                    'colour' => 'orange'
+                                ]
+                            ] 
                         ]
                     ],
                 ],[
@@ -287,6 +322,7 @@ function navigation_array($selected = false)
     {
         
         $selected = '/'.$selected;
+        $selected = str_replace('//', '/', $selected);
         $selected = str_replace('.php', '', $selected);
         $selected = str_replace('.', '/', $selected);
         $selected = substr($selected, 0, strrpos($selected, '/'));

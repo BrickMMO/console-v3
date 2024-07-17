@@ -96,6 +96,7 @@ else
  * Parse URL for possible filenames and check if file exists. 
  */
 $file = '';
+$final_file = '';
 
 foreach($parts as $part)
 {
@@ -105,11 +106,13 @@ foreach($parts as $part)
 
     if(file_exists($folder.$file)) 
     {
-        define('PAGE_FILE', $file);
-        break;
+        $final_file = $file;
+        $final_parts = $parts;
     }
 
 }
+
+if($final_file) define('PAGE_FILE', $final_file);
 
 /**
  * If URL does not result in an existing file. 
@@ -124,13 +127,13 @@ if(!defined('PAGE_FILE'))
  * Parse remaining URL data into a $_GET array. 
  */
 
-if(count($parts) == 1)
+if(count($final_parts) == 1)
 {
-    $_GET['key'] = array_shift($parts);
+    $_GET['key'] = array_shift($final_parts);
 }
-for($i = 0; $i < count($parts); $i += 2)
+for($i = 0; $i < count($final_parts); $i += 2)
 {
-    $_GET[$parts[$i]] = isset($parts[$i+1]) ? $parts[$i+1] : true;
+    $_GET[$final_parts[$i]] = isset($final_parts[$i+1]) ? $final_parts[$i+1] : true;
 }
 
 /**
@@ -139,7 +142,7 @@ for($i = 0; $i < count($parts); $i += 2)
 if(PAGE_TYPE == 'ajax') 
 {
     $_POST = json_decode(file_get_contents('php://input'), true);
-    include('ajax/'.$file);
+    include('ajax/'.PAGE_FILE);
     echo json_encode($data);
     exit;
 }
@@ -149,7 +152,7 @@ if(PAGE_TYPE == 'ajax')
  */
 elseif(PAGE_TYPE == 'api') 
 {
-    include('api/'.$file);
+    include('api/'.PAGE_FILE);
     echo json_encode($data);
     exit;
 }
@@ -159,7 +162,7 @@ elseif(PAGE_TYPE == 'api')
  */
 elseif(PAGE_TYPE == 'action') 
 {
-    include('action/'.$file);
+    include('action/'.PAGE_FILE);
     exit;
 }
 
@@ -168,6 +171,6 @@ elseif(PAGE_TYPE == 'action')
  */
 else
 {
-    include($file);
+    include(PAGE_FILE);
 }
 
