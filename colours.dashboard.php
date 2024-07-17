@@ -45,15 +45,23 @@ include('templates/message.php');
             <?=$word?>
         </span>
     <?php endforeach; ?> -->
+
+    <?php
+        $query = 'SELECT * FROM colours ORDER BY name';
         
-        <?php
-        for ($i = 1; $i <= 20; $i++) {
-            echo "<div class='w3-col l1 m2 s4 w3-margin-right w3-margin-left'>
-                    <div style='width: 75px; height: 75px; background-color: #D9D9D9;'></div>
-                    <p>#fcfdfd</p>
-                </div>";
-        }
-        ?> 
+        $result = mysqli_query($connect, $query);
+        
+        while($colour = mysqli_fetch_assoc($result)): 
+    ?>
+
+
+    <div class="w3-col l1 m2 s4 w3-margin-right w3-margin-left">
+        <div style="width: 75px; height: 75px; background-color: #<?=$colour['rgb']?>;"></div>
+        <p>#<?=$colour['rgb']?></p>
+    </div>
+
+        
+    <?php endwhile; ?>
           
 </div>
 <a

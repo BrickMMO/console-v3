@@ -29,18 +29,18 @@ if ($_GET['key'] == 'go')
     foreach($response['results'] as $colour)
     {
 
-        echo '<pre>';
-        print_r($colour);
-        echo '</pre>';
-
-        /* $query = 'INSERT INTO colours (
+        $query = 'INSERT INTO colours (
                 name,
                 rgb,
                 is_trans,
+                created_at,
+                updated_at
             ) VALUES (
                 "'.$colour['name'].'",
                 "'.$colour['rgb'].'",
                 "'.($colour['is_trans'] ? 'yes' : 'no').'",
+                NOW(),
+                NOW()
             )';
 
         mysqli_query($connect, $query);
@@ -57,21 +57,24 @@ if ($_GET['key'] == 'go')
                         name,
                         source,
                         colour_id,
+                        created_at,
+                        updated_at
                     ) VALUES (
                         "'.$colour['external_ids'][$key]['ext_descrs'][$key2][0].'",
                         "'.strtolower($key).'",
                         "'.$id.'",
-                        "'.($value2 ? $value2 : $key2).'"
+                        NOW(),
+                        NOW()
                     )';
                 mysqli_query($connect, $query);
 
             }
 
-        } */
+        }
     }
     
     message_set('Colour List', 'Pulling the colour list.');
-    header_redirect('/colours/import');  
+    header_redirect('/colours/import');
 }
 
 define('APP_NAME', 'Colours');
