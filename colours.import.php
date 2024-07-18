@@ -26,6 +26,14 @@ if ($_GET['key'] == 'go')
 
     $response = json_decode($response, true);
 
+    $query = 'TRUNCATE TABLE colours';
+    
+    mysqli_query($connect, $query);
+
+    $query = 'TRUNCATE TABLE externals';
+    
+    mysqli_query($connect, $query);
+
     foreach($response['results'] as $colour)
     {
 
