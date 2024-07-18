@@ -44,8 +44,8 @@ $colours_last_import = setting_fetch('COLOURS_LAST_IMPORT');
     </p>
 <hr>
 <p>
-    Num colours collected: <span class="w3-tag w3-blue"><?=$colours_count?></span> 
-    Last import: <span class="w3-tag w3-blue"><?=(new DateTime($colours_last_import))->format("D, M j g:i A")?></span> 
+    Number of colours imported: <span class="w3-tag w3-blue"><?=$colours_count?></span> 
+    Last import: <span class="w3-tag w3-blue"><?=(new DateTime($colours_last_import))->format("D, M j g:i A")?></span>
 </p>
 <hr />
 <h2>Colour List</h2>
