@@ -17,8 +17,6 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-# $colour_list = setting_fetch('BRICKSUM_WORDLIST', 'comma_2_array');
-
 ?>
 
 
@@ -40,28 +38,26 @@ include('templates/message.php');
 <h2>Colour List</h2>
 <div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
 
-    <!-- <?php foreach($colour_list as $colour): ?>
-        <span class="w3-tag w3-green w3-round w3-margin-bottom w3-padding">
-            <?=$word?>
-        </span>
-    <?php endforeach; ?> -->
-
     <?php
         $query = 'SELECT * FROM colours ORDER BY name';
         
         $result = mysqli_query($connect, $query);
         
-        while($colour = mysqli_fetch_assoc($result)): 
+        if (mysqli_num_rows($result) == 0) {
+            echo "<h3>Getting colours from the Database...</h3>";
+        } else {
+            while($colour = mysqli_fetch_assoc($result)):
     ?>
-
 
     <div class="w3-col l1 m2 s4 w3-margin-right w3-margin-left">
         <div style="width: 75px; height: 75px; background-color: #<?=$colour['rgb']?>;"></div>
         <p>#<?=$colour['rgb']?></p>
     </div>
-
-        
-    <?php endwhile; ?>
+   
+    <?php 
+            endwhile; 
+        } 
+    ?>
           
 </div>
 <a

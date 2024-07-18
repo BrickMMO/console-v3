@@ -115,7 +115,35 @@ $bricksum_stopwords = setting_fetch('BRICKSUM_STOPWORDS', 'comma');
 <h2>Import Progress</h2>
 
 <div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
-    <h3>Import Details...</h3>
+
+    <?php
+        $query = 'SELECT * FROM colours ORDER BY name';
+        
+        $result = mysqli_query($connect, $query);
+
+        if (mysqli_num_rows($result) == 0) {
+            echo "<h3>Import Details...</h3>";
+        } else {
+            echo "<h3>Data Imported:</h3>
+                  <div class='w3-white'>[";
+            while($colour = mysqli_fetch_assoc($result)): 
+    ?>
+
+        <div class="w3-margin-left w3-white">
+            <p>{</p>
+            <div class="w3-margin-left">
+                <p><span class="w3-text-red">"name"</span>: <span class="w3-text-indigo">"<?=$colour['name']?>"</span>,</p>
+                <p><span class="w3-text-red">"rgb"</span>: <span class="w3-text-indigo">"<?=$colour['rgb']?>"</span>,</p>
+                <p><span class="w3-text-red">"is_trans"</span>: <span class="w3-text-indigo"><?= ($colour['is_trans'] == "yes" ? "true" : "false")?></span></p>
+            </div>
+            <p>}</p>
+        </div>
+ 
+    <?php 
+            endwhile;
+            echo "]</div>"; 
+        } 
+    ?>
 </div>
 
 <button onclick='window.location.href = "http://local.console.brickmmo.com:7777/colours/import/go"' 
