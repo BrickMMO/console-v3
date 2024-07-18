@@ -17,6 +17,11 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
+$query = 'SELECT * FROM colours ORDER BY name';
+        
+$result = mysqli_query($connect, $query);
+
+$colours_last_import = setting_fetch('COLOURS_LAST_IMPORT');
 ?>
 
 
@@ -33,18 +38,19 @@ include('templates/message.php');
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
     Colours
+    </p>
+<hr>
+<p>
+    Num colours collected: <span class="w3-tag w3-blue"><?=mysqli_num_rows($result)?></span> 
+    Last import: <span class="w3-tag w3-blue"><?=(new DateTime($colours_last_import))->format("D, M j g:i A")?></span> 
 </p>
 <hr />
 <h2>Colour List</h2>
 <div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
 
-    <?php
-        $query = 'SELECT * FROM colours ORDER BY name';
-        
-        $result = mysqli_query($connect, $query);
-        
-        if (mysqli_num_rows($result) == 0) {
-            echo "<h3>Getting colours from the Database...</h3>";
+    <?php       
+        if (mysqli_num_rows($result) === 0) {
+            echo "<p>The colours table is empty. Go to Import Colours to import the data.</p>";
         } else {
             while($colour = mysqli_fetch_assoc($result)):
     ?>

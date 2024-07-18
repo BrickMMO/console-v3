@@ -3,7 +3,9 @@
 security_check();
 admin_check();
 
-if ($_GET['key'] == 'go') 
+$colours_last_import = setting_fetch('COLOURS_LAST_IMPORT');
+
+if (isset($_GET['key']) && $_GET['key'] == 'go') 
 {
     $url = 'https://rebrickable.com/api/v3/lego/colors/';
 
@@ -14,7 +16,7 @@ if ($_GET['key'] == 'go')
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-  
+
     curl_setopt($curl, CURLOPT_HTTPHEADER, [
         'Accept: application/json',
         'Authorization: key '.REBRICKABLE_KEY,
@@ -34,6 +36,10 @@ if ($_GET['key'] == 'go')
     
     mysqli_query($connect, $query);
 
+    $query = 'UPDATE settings SET value = NOW() WHERE name = "COLOURS_LAST_IMPORT" LIMIT 1';
+
+    mysqli_query($connect, $query);
+
     foreach($response['results'] as $colour)
     {
 
@@ -41,12 +47,14 @@ if ($_GET['key'] == 'go')
                 name,
                 rgb,
                 is_trans,
+                rebrickable_id,
                 created_at,
                 updated_at
             ) VALUES (
                 "'.$colour['name'].'",
                 "'.$colour['rgb'].'",
                 "'.($colour['is_trans'] ? 'yes' : 'no').'",
+                "'.$colour['id'].'",
                 NOW(),
                 NOW()
             )';
@@ -120,7 +128,7 @@ $bricksum_stopwords = setting_fetch('BRICKSUM_STOPWORDS', 'comma');
     Import Colours
 </p>
 <hr />
-<h2>Import Progress</h2>
+<h2>Import Colours</h2>
 
 <div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
 
@@ -129,27 +137,21 @@ $bricksum_stopwords = setting_fetch('BRICKSUM_STOPWORDS', 'comma');
         
         $result = mysqli_query($connect, $query);
 
-        if (mysqli_num_rows($result) == 0) {
-            echo "<h3>Import Details...</h3>";
+        if (mysqli_num_rows($result) === 0) {
+            echo "<p>Click on <span style='font-weight: bold'>\"Start Import\"</span> to import the colours from the Rebrickable API.</p>";
         } else {
-            echo "<h3>Data Imported:</h3>
-                  <div class='w3-white'>[";
-            while($colour = mysqli_fetch_assoc($result)): 
-    ?>
-
-        <div class="w3-margin-left w3-white">
-            <p>{</p>
-            <div class="w3-margin-left">
-                <p><span class="w3-text-red">"name"</span>: <span class="w3-text-indigo">"<?=$colour['name']?>"</span>,</p>
-                <p><span class="w3-text-red">"rgb"</span>: <span class="w3-text-indigo">"<?=$colour['rgb']?>"</span>,</p>
-                <p><span class="w3-text-red">"is_trans"</span>: <span class="w3-text-indigo"><?= ($colour['is_trans'] == "yes" ? "true" : "false")?></span></p>
+            echo "<h3>A total of ".mysqli_num_rows($result)." colours were imported on <span style='font-weight: bold'>".(new DateTime($colours_last_import))->format("D, M j g:i A")."<span></h3>";
+        ?>
+            <br>
+            <div>
+                To re-import the colors from the Rebrickable API, click "Start Import". This will:
+                <ol>
+                    <li>Delete the data stored in the Colours and Externals tables</li>
+                    <li>Reset the auto-increment of the table IDs</li>
+                    <li>Import and save the data in each of the tables</li>
+                </ol>
             </div>
-            <p>}</p>
-        </div>
- 
-    <?php 
-            endwhile;
-            echo "]</div>"; 
+    <?php
         } 
     ?>
 </div>
