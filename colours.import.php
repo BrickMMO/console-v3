@@ -7,16 +7,13 @@ $colours_last_import = setting_fetch('COLOURS_LAST_IMPORT');
 
 if (isset($_GET['key']) && $_GET['key'] == 'go') 
 {
-    $url = 'https://rebrickable.com/api/v3/lego/colors/';
+
+    $url = 'https://rebrickable.com/api/v3/lego/colors/?page_size=500';
 
     $curl = curl_init($url);
-
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
     curl_setopt($curl, CURLOPT_HTTPHEADER, [
         'Accept: application/json',
         'Authorization: key '.REBRICKABLE_KEY,
@@ -29,15 +26,15 @@ if (isset($_GET['key']) && $_GET['key'] == 'go')
     $response = json_decode($response, true);
 
     $query = 'TRUNCATE TABLE colours';
-    
     mysqli_query($connect, $query);
 
     $query = 'TRUNCATE TABLE externals';
-    
     mysqli_query($connect, $query);
 
-    $query = 'UPDATE settings SET value = NOW() WHERE name = "COLOURS_LAST_IMPORT" LIMIT 1';
-
+    $query = 'UPDATE settings SET 
+        value = NOW() 
+        WHERE name = "COLOURS_LAST_IMPORT" 
+        LIMIT 1';
     mysqli_query($connect, $query);
 
     foreach($response['results'] as $colour)
@@ -58,7 +55,6 @@ if (isset($_GET['key']) && $_GET['key'] == 'go')
                 NOW(),
                 NOW()
             )';
-
         mysqli_query($connect, $query);
 
         $id = mysqli_insert_id($connect);
@@ -87,10 +83,12 @@ if (isset($_GET['key']) && $_GET['key'] == 'go')
             }
 
         }
+
     }
     
-    message_set('Colour List', 'Pulling the colour list.');
+    message_set('Import Success', 'Colour list has been imported from Rebrickable.');
     header_redirect('/colours/import');
+
 }
 
 define('APP_NAME', 'Colours');
@@ -107,8 +105,10 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$bricksum_wordlist = setting_fetch('BRICKSUM_WORDLIST', 'comma');
-$bricksum_stopwords = setting_fetch('BRICKSUM_STOPWORDS', 'comma');
+$query = 'SELECT * 
+    FROM colours 
+    ORDER BY name';
+$result = mysqli_query($connect, $query);
 
 ?>
 
@@ -124,43 +124,37 @@ $bricksum_stopwords = setting_fetch('BRICKSUM_STOPWORDS', 'comma');
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
-    <a href="/bricksum/dashboard">Colours</a> / 
+    <a href="/colours/dashboard">Colours</a> / 
     Import Colours
 </p>
 <hr />
 <h2>Import Colours</h2>
 
-<div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
+<p>
+    There are currently 
+    <span><?=mysqli_num_rows($result)?> 
+    colours imported from 
+    <a href="https://rebrickable.com/api/">Rebrickable</a>.
+</p>
 
-    <?php
-        $query = 'SELECT * FROM colours ORDER BY name';
-        
-        $result = mysqli_query($connect, $query);
+<hr />
 
-        if (mysqli_num_rows($result) === 0) {
-            echo "<p>Click on <span style='font-weight: bold'>\"Start Import\"</span> to import the colours from the Rebrickable API.</p>";
-        } else {
-            echo "<h3>A total of ".mysqli_num_rows($result)." colours were imported on <span style='font-weight: bold'>".(new DateTime($colours_last_import))->format("D, M j g:i A")."<span></h3>";
-        ?>
-            <br>
-            <div>
-                To re-import the colors from the Rebrickable API, click "Start Import". This will:
-                <ol>
-                    <li>Delete the data stored in the Colours and Externals tables</li>
-                    <li>Reset the auto-increment of the table IDs</li>
-                    <li>Import and save the data in each of the tables</li>
-                </ol>
-            </div>
-    <?php
-        } 
-    ?>
-</div>
+<p>
+    Re-importimg the colors from 
+    <a href="https://rebrickable.com/api/">Rebrickable</a>:
+</p>
 
-<button onclick='window.location.href = "http://local.console.brickmmo.com:7777/colours/import/go"' 
-        class="w3-block w3-btn w3-orange w3-text-white w3-margin-bottom w3-margin-top">
-    <i class="fa-solid fa-download"></i>
-    Start Import
-</button>
+<ul>
+    <li>Delete the current colours data.</li>
+    <li>Re-import the colour data from <a href="https://rebrickable.com/api/">Rebrickable</a>.</li>
+</ul>
+            
+<a
+    href="/colours/import/go"
+    class="w3-button w3-white w3-border"
+>
+    <i class="fa-solid fa-download"></i> Start Import
+</a>
     
 <?php
 
