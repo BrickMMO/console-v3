@@ -17,9 +17,12 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$query = 'SELECT * FROM colours ORDER BY name';
-        
+$query = 'SELECT * 
+    FROM colours 
+    ORDER BY name';    
 $result = mysqli_query($connect, $query);
+
+$colours_count = mysqli_num_rows($result);
 
 $colours_last_import = setting_fetch('COLOURS_LAST_IMPORT');
 ?>
@@ -41,31 +44,36 @@ $colours_last_import = setting_fetch('COLOURS_LAST_IMPORT');
     </p>
 <hr>
 <p>
-    Num colours collected: <span class="w3-tag w3-blue"><?=mysqli_num_rows($result)?></span> 
+    Num colours collected: <span class="w3-tag w3-blue"><?=$colours_count?></span> 
     Last import: <span class="w3-tag w3-blue"><?=(new DateTime($colours_last_import))->format("D, M j g:i A")?></span> 
 </p>
 <hr />
 <h2>Colour List</h2>
-<div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
 
-    <?php       
-        if (mysqli_num_rows($result) === 0) {
-            echo "<p>The colours table is empty. Go to Import Colours to import the data.</p>";
-        } else {
-            while($colour = mysqli_fetch_assoc($result)):
-    ?>
+<?php if (mysqli_num_rows($result)): ?>
 
-    <div class="w3-col l1 m2 s4 w3-margin-right w3-margin-left">
-        <div style="width: 75px; height: 75px; background-color: #<?=$colour['rgb']?>;"></div>
-        <p>#<?=$colour['rgb']?></p>
+    <div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
+
+        <?php while($colour = mysqli_fetch_assoc($result)): ?>
+
+            <div class="w3-col l1 m2 s4 w3-margin-right w3-margin-left">
+                <div style="width: 75px; height: 75px; background-color: #<?=$colour['rgb']?>;"></div>
+                <p>#<?=$colour['rgb']?></p>
+            </div>
+
+        <?php endwhile; ?>
+
     </div>
-   
-    <?php 
-            endwhile; 
-        } 
-    ?>
-          
-</div>
+
+<?php else: ?>
+
+    <p>
+        Colour data has not yet been imported from 
+        <a href="https://rebrickable.com/api/">Rebrickable</a>.
+    </p>
+
+<?php endif; ?>
+
 <a
     href="/colours/import"
     class="w3-button w3-white w3-border"

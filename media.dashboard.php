@@ -17,6 +17,22 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
+$query = 'SELECT *
+    FROM media
+    WHERE image IS NOT NULL 
+    AND deleted_at IS NULL';
+$image_count = mysqli_num_rows(mysqli_query($connect, $query));
+
+$query = 'SELECT *
+    FROM media
+    WHERE video IS NOT NULL 
+    AND deleted_at IS NULL';
+$video_count = mysqli_num_rows(mysqli_query($connect, $query));
+
+$query = 'SELECT *
+    FROM media_downloads';
+$download_count = mysqli_num_rows(mysqli_query($connect, $query));
+
 ?>
 
 
@@ -36,11 +52,17 @@ include('templates/message.php');
 </p>
 <hr>
 <p>
-    Total videos, images, downloads, etc...
+    Total Images: <span class="w3-tag w3-blue"><?=$image_count?></span> 
+    Total Videos: <span class="w3-tag w3-blue"><?=$video_count?></span> 
+    Total Downloads: <span class="w3-tag w3-blue"><?=$download_count?></span>
 </p>
 <hr />
 
-<h2>Media Dashboard</h2>
+<h2>Popular Media</h2>
+
+<p>
+    Display the 8 most popular downloads...
+</p>
 
 <hr />
 
