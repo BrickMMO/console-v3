@@ -28,7 +28,7 @@
     confirmContent.innerHTML = text;
     confirmUrl.href = url;
 
-    open_modal('confirm');  
+    open_modal('confirm');
     return false;
 
   }
