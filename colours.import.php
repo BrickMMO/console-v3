@@ -141,7 +141,7 @@ $result = mysqli_query($connect, $query);
 
 <p>
     Re-importimg the colors from 
-    <a href="https://rebrickable.com/api/">Rebrickable</a>:
+    <a href="https://rebrickable.com/api/">Rebrickable</a> will:
 </p>
 
 <ul>
