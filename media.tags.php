@@ -79,6 +79,7 @@ $result = mysqli_query($connect, $query);
         <th class="bm-table-number">Images</th>
         <th class="bm-table-number">Videos</th>
         <th class="bm-table-icon"></th>
+        <th class="bm-table-icon"></th>
     </tr>
 
     <?php while($record = mysqli_fetch_assoc($result)): ?>
@@ -93,8 +94,12 @@ $result = mysqli_query($connect, $query);
                 <?=$record['videos']?>
             </td>
             <td>
+                <a href="/media/tags/edit/<?=$record['id']?>">
+                    <i class="fa-solid fa-pencil"></i>
+                </a>
+            <td>
                 <a href="#" onclick="return confirmModal('Are you sure you want to delete the tag <?=$record['name']?>?', '/media/tags/delete/<?=$record['id']?>');">
-                    <i class="fa-solid fa-xmark"></i>
+                    <i class="fa-solid fa-trash-can"></i>
                 </a>
             </td>
         </tr>

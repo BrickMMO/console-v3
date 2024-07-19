@@ -3,28 +3,33 @@
 security_check();
 admin_check();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+if(
+    !isset($_GET['key']) || 
+    !is_numeric($_GET['key']) || 
+    !tag_fetch($_GET['key']))
+{
+    message_set('Tag Error', 'There was an error with the provided tag.');
+    header_redirect('/media/tags');
+}
+elseif ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
 
     // Basic serverside validation
     if (!validate_blank($_POST['name']))
     {
+
         message_set('Tag Error', 'There was an error with the provided tag.', 'red');
-        header_redirect('/media/tags/add');
+        header_redirect('/media/tags');
     }
     
-    $query = 'INSERT INTO tags (
-            name,
-            created_at,
-            updated_at
-        ) VALUES (
-            "'.addslashes($_POST['name']).'",
-            NOW(),
-            NOW()
-        )';
+    $query = 'UPDATE tags SET
+        name = "'.addslashes($_POST['name']).'",
+        updated_at = NOW()
+        WHERE id = '.$_GET['key'].'
+        LIMIT 1';
     mysqli_query($connect, $query);
 
-    message_set('Tag Success', 'Your tag has been added.');
+    message_set('Tag Success', 'Your tag has been edited.');
     header_redirect('/media/tags');
     
 }
@@ -43,6 +48,8 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
+$tag = tag_fetch($_GET['key']);
+
 ?>
 
 <!-- CONTENT -->
@@ -59,12 +66,12 @@ include('templates/message.php');
     <a href="/city/dashboard">Dashboard</a> / 
     <a href="/media/dashboard">Media</a> / 
     <a href="/media/tags">Tags</a> / 
-    Add Tag
+    Edit <?=$tag['name']?>
 </p>
 
 <hr />
 
-<h2>Add Tag</h2>
+<h2>Edit <?=$tag['name']?></h2>
 
 <form
     method="post"
@@ -78,6 +85,7 @@ include('templates/message.php');
         type="text" 
         id="name" 
         autocomplete="off"
+        value="<?=$tag['name']?>"
     />
     <label for="name" class="w3-text-gray">
         Name <span id="name-error" class="w3-text-red"></span>
