@@ -9,41 +9,79 @@ if(isset($_GET['key'])){
 
     $result = mysqli_query($connect, $query);
 
-    if ($result) {
+    if(mysqli_num_rows($result) === 0) {
+        $query = 'SELECT * 
+        FROM colours 
+        WHERE id ='.$_GET["key"].' LIMIT 1'; 
 
-        header("Content-type: JSON");
+        $result = mysqli_query($connect, $query);
 
         $colourObject = mysqli_fetch_assoc($result);
 
-        $colour = array(
-            'id' => $colourObject['id'],
-            'name' => $colourObject['name'],
-            'rgb' => $colourObject['rgb'],
-            'is_trans' => $colourObject['is_trans'],
-            'rebrickable_id' => $colourObject['rebrickable_id'],
-            'external_ids' => array(),
-        );
+        if ($result) {
 
-        mysqli_data_seek($result, 0);
-
-        while ($externals = mysqli_fetch_assoc($result)) {
-            $colour['external_ids'][] = array(
-                'source' => $externals['source'],
-                'name' => $externals['external_name']
+            header("Content-type: JSON");
+    
+            $colour = array(
+                'id' => $colourObject['id'],
+                'name' => $colourObject['name'],
+                'rgb' => $colourObject['rgb'],
+                'is_trans' => $colourObject['is_trans'],
+                'rebrickable_id' => $colourObject['rebrickable_id']
+            );
+    
+            $data = array(
+                'message' => 'Colours retrieved successfully.',
+                'error' => false, 
+                'colours' => $colour,
+            );
+    
+        } else {
+            $data = array(
+                'message' => 'Error retrieving colours detail.',
+                'error' => true,
+                'colours' => null,
             );
         }
+    }
 
-        $data = array(
-            'message' => 'Colours retrieved successfully.',
-            'error' => false, 
-            'colours' => $colour,
-        );
+    else{
+        if ($result) {
 
-    } else {
-        $data = array(
-            'message' => 'Error retrieving colours detail.',
-            'error' => true,
-            'colours' => null,
-        );
+            header("Content-type: JSON");
+    
+            $colourObject = mysqli_fetch_assoc($result);
+    
+            $colour = array(
+                'id' => $colourObject['id'],
+                'name' => $colourObject['name'],
+                'rgb' => $colourObject['rgb'],
+                'is_trans' => $colourObject['is_trans'],
+                'rebrickable_id' => $colourObject['rebrickable_id'],
+                'external_ids' => array(),
+            );
+    
+            mysqli_data_seek($result, 0);
+    
+            while ($externals = mysqli_fetch_assoc($result)) {
+                $colour['external_ids'][] = array(
+                    'source' => $externals['source'],
+                    'name' => $externals['external_name']
+                );
+            }
+    
+            $data = array(
+                'message' => 'Colours retrieved successfully.',
+                'error' => false, 
+                'colours' => $colour,
+            );
+    
+        } else {
+            $data = array(
+                'message' => 'Error retrieving colours detail.',
+                'error' => true,
+                'colours' => null,
+            );
+        }
     }
 }
