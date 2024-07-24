@@ -23,24 +23,24 @@ if(isset($_GET['key'])) {
             $i++;
         }
 
-        $minimun = 255;
+        $colorDistanceArray = $colorArray;
 
-        $closest = $colorArray[0];
+        foreach($colorArray as $index => $color){
 
-        foreach($colorArray as $color){
+            $rgbColorDistance = colorDistance($color['rgb'], $_GET['key']);
 
-            $rgbColorArray = colorDistance($color['rgb'], $_GET['key']);
-
-            if($rgbColorArray < $minimun){
-                $closest = $color;
-                $minimun = $rgbColorArray;
-            }
+            $colorDistanceArray[$index]['colorDistance'] = $rgbColorDistance;
         }
         
+        usort($colorDistanceArray, function($first, $second) {
+            if ($first['colorDistance'] == $second['colorDistance']) return 0;
+            return ($first['colorDistance'] < $second['colorDistance']) ? -1 : 1;
+        });
+
         $data = array(
             'message' => 'Colours retrieved successfully.',
             'error' => false, 
-            'colours' => $closest,
+            'colours' => $colorDistanceArray,
         );
         
     } else {
