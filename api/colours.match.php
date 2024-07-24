@@ -37,10 +37,16 @@ if(isset($_GET['key'])) {
             return ($first['colorDistance'] < $second['colorDistance']) ? -1 : 1;
         });
 
+        $colorMatch = array();
+
+        for($i = 0; $i < 4; $i++){
+            $colorMatch[$i] = $colorDistanceArray[$i];
+        }
+
         $data = array(
             'message' => 'Colours retrieved successfully.',
             'error' => false, 
-            'colours' => $colorDistanceArray,
+            'colours' => $colorMatch,
         );
         
     } else {
