@@ -21,6 +21,12 @@ $github_accounts = setting_fetch('GITHUB_ACCOUNTS');
 $github_last_import = setting_fetch('GITHUB_LAST_IMPORT');
 $github_repos_scanned = setting_fetch('GITHUB_REPOS_SCANNED');
 
+$query = 'SELECT *
+    FROM repos
+    ORDER BY error_count DESC
+    LIMIT 6';
+$result = mysqli_query($connect, $query);
+
 ?>
 
 <!-- CONENT -->
@@ -45,6 +51,28 @@ $github_repos_scanned = setting_fetch('GITHUB_REPOS_SCANNED');
 </p>
 <hr />
 <h2>Next Six Repos</h2>
+
+
+<div class="w3-row-padding" style="margin-left: -16px; margin-right: -16px">
+
+    <?php while($record = mysqli_fetch_assoc($result)): ?>
+        <div class="w3-third">
+            <div class="w3-card w3-container w3-margin-bottom w3-padding-24">
+                <a href="/github/results/repo/<?=$record['name']?>">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i> /<?=$record['owner']?>/<?=$record['name']?>
+                </a>
+                <div class="w3-margin-top">
+                    <span class="w3-tag w3-black">
+                        <?=explode(chr(13), $record['error_comments'])[0]?> 
+                        (+<?=count(explode(chr(13), $record['error_comments']))?>)
+                    </span>
+                </div>
+            </div>
+        </div>
+    <?php endwhile; ?>
+
+</div>
+
 
 <?php foreach(explode(',', $github_accounts) as $account): ?>
 

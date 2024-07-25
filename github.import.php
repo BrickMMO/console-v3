@@ -142,11 +142,12 @@ mysqli_query($connect, $query);
             }
 
             let a = document.createElement('a');
-            a.href = resultRepo.repo.html_url;
+            a.href = '/github/results/repo/'+resultRepo.repo.name;
+            a.innerHTML = '<i class="fa-brands fa-github" aria-hidden="true"></i> /'+resultRepo.repo.full_name;
             div.append(a);
 
-            let aText = document.createTextNode(resultRepo.repo.html_url);
-            a.append(aText);
+            // let aText = document.createTextNode(resultRepo.repo.html_url);
+            // a.append(aText);
 
             let hr = document.createElement('hr');
             div.append(hr);

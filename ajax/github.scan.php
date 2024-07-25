@@ -330,6 +330,7 @@ $query = 'INSERT INTO repos (
         error_description,
         error_topics,
         error_comments,
+        error_count,
         created_at,
         updated_at
     ) VALUES (
@@ -345,6 +346,7 @@ $query = 'INSERT INTO repos (
         "'.$errors['error_description'].'",
         "'.$errors['error_topics'].'",
         "'.implode(chr(13),$error_comments).'",
+        "'.count($error_comments).'",
         NOW(),
         NOW()        
     )';
@@ -352,6 +354,14 @@ mysqli_query($connect, $query);
 
 // debug_pre($query);
 // debug_pre($error_comments);
+
+$query = 'SELECT COUNT(*) AS total_repos
+    FROM repos';
+$result = mysqli_query($connect, $query);
+
+$record = mysqli_fetch_assoc($result);
+
+setting_update('GITHUB_REPOS_SCANNED', $record['total_repos']);
 
 $data = array(
     'message' => 'GitHub repo details has been retrieved.',
