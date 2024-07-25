@@ -25,8 +25,8 @@ $result = mysqli_query($connect, $query);
 $colours_count = mysqli_num_rows($result);
 
 $colours_last_import = setting_fetch('COLOURS_LAST_IMPORT');
-?>
 
+?>
 
 <!-- CONTENT -->
 
