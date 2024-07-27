@@ -97,6 +97,7 @@ $result = mysqli_query($connect, $query);
                 <a href="/media/tags/edit/<?=$record['id']?>">
                     <i class="fa-solid fa-pencil"></i>
                 </a>
+            </td>
             <td>
                 <a href="#" onclick="return confirmModal('Are you sure you want to delete the tag <?=$record['name']?>?', '/media/tags/delete/<?=$record['id']?>');">
                     <i class="fa-solid fa-trash-can"></i>

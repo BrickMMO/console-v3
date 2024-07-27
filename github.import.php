@@ -142,7 +142,7 @@ mysqli_query($connect, $query);
             }
 
             let a = document.createElement('a');
-            a.href = '/github/results/repo/'+resultRepo.repo.name;
+            a.href = '/github/repo/'+resultRepo.repo.name;
             a.innerHTML = '<i class="fa-brands fa-github" aria-hidden="true"></i> /'+resultRepo.repo.full_name;
             div.append(a);
 
@@ -155,7 +155,7 @@ mysqli_query($connect, $query);
             loading.prepend(div);
              
 
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 0));
 
         }
             

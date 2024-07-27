@@ -23,8 +23,7 @@ $github_repos_scanned = setting_fetch('GITHUB_REPOS_SCANNED');
 
 $query = 'SELECT *
     FROM repos
-    ORDER BY error_count DESC
-    LIMIT 6';
+    ORDER BY error_count DESC';
 $result = mysqli_query($connect, $query);
 
 ?>
@@ -41,37 +40,36 @@ $result = mysqli_query($connect, $query);
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
-    GitHub Tools
-</p>
-<hr>
-<p>
-    Currently scanning: <span class="w3-tag w3-blue"><?=$github_accounts?></span> 
-    Number of repos scanned: <span class="w3-tag w3-blue"><?=$github_repos_scanned?></span> 
-    Last import: <span class="w3-tag w3-blue"><?=(new DateTime($github_last_import))->format("D, M j g:i A")?></span>
+    <a href="/github/dashboard">GitHub Tools</a> / 
+    Scan Results
 </p>
 <hr />
-<h2>Next Six Repos</h2>
+<h2>Repo List</h2>
 
-
-<div class="w3-row-padding" style="margin-left: -16px; margin-right: -16px">
+<table class="w3-table w3-bordered w3-striped w3-margin-bottom">
+    <tr>
+        <th>Name</th>
+        <th class="bm-table-number">Errors</th>
+        <th>Last Scanned</th>
+    </tr>
 
     <?php while($record = mysqli_fetch_assoc($result)): ?>
-        <div class="w3-third">
-            <div class="w3-card w3-container w3-margin-bottom w3-padding-24">
+        <tr>
+            <td>
                 <a href="/github/repo/<?=$record['name']?>">
                     <i class="fa-brands fa-github" aria-hidden="true"></i> /<?=$record['owner']?>/<?=$record['name']?>
                 </a>
-                <div class="w3-margin-top">
-                    <span class="w3-tag w3-black">
-                        <?=explode(chr(13), $record['error_comments'])[0]?> 
-                        (+<?=count(explode(chr(13), $record['error_comments']))?>)
-                    </span>
-                </div>
-            </div>
-        </div>
+            </td>
+            <td>
+                <?=$record['error_count']?>
+            </td>
+            <td>
+                <?=time_elapsed_string($record['updated_at'])?>
+            </td>
+        </tr>
     <?php endwhile; ?>
 
-</div>
+</table>
 
 
 <?php foreach(explode(',', $github_accounts) as $account): ?>
