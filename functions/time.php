@@ -3,6 +3,8 @@
 function time_elapsed_string($datetime, $full = false) 
 {
 
+    $datetime = time_adjust($datetime);
+
     $now = new DateTime;
     $ago = new DateTime($datetime); 
     $diff = $now->diff($ago);
@@ -37,9 +39,15 @@ function time_elapsed_string($datetime, $full = false)
 
 }
 
-function time_adjust($time)
+function time_adjust($datetime)
 {
 
-    return $time;
+    if(isset($_SESSION['timezone']))
+    {
+        $datetime = new DateTime($datetime);
+        $datetime->modify('+ '.$_SESSION['timezone']['offset'].' minutes');
+    }
+
+    return $datetime->format('Y-m-d H:i:s');
 
 }
