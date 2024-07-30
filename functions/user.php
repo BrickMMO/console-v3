@@ -12,19 +12,29 @@ function user_name($id)
     return $user['first'].' '.$user['last'];
 }
 
-function user_fetch($identifier)
+function user_fetch($identifier, $field = false)
 {
 
     global $connect;
 
-    $query = 'SELECT *
-        FROM users
-        WHERE id = "'.addslashes($identifier).'"
-        OR email = "'.addslashes($identifier).'"
-        OR github_username = "'.addslashes($identifier).'"
-        OR (reset_hash = "'.addslashes($identifier).'" AND reset_hash != "")
-        OR (verify_hash = "'.addslashes($identifier).'" AND verify_hash != "")
-        LIMIT 1';
+    if($field)
+    {
+        $query = 'SELECT *
+            FROM users
+            WHERE '.$field.' = "'.addslashes($identifier).'"
+            LIMIT 1';
+    }
+    else
+    {
+        $query = 'SELECT *
+            FROM users
+            WHERE id = "'.addslashes($identifier).'"
+            OR email = "'.addslashes($identifier).'"
+            OR github_username = "'.addslashes($identifier).'"
+            OR (reset_hash = "'.addslashes($identifier).'" AND reset_hash != "")
+            OR (verify_hash = "'.addslashes($identifier).'" AND verify_hash != "")
+            LIMIT 1';
+    }
     $result = mysqli_query($connect, $query);
 
     if(mysqli_num_rows($result)) return mysqli_fetch_assoc($result);

@@ -46,6 +46,12 @@ include('templates/main_header.php');
             <i class="fa-solid fa-chevron-right fa-pull-right w3-text-dark-grey"></i>
         </a>
         <hr>
+        <a href="<?=ENV_CONSOLE_DOMAIN?>/city/url" class="w3-display-container">
+            <i class="fa-solid fa-globe fa-padding-right w3-text-dark-grey"></i>
+            URL
+            <i class="fa-solid fa-chevron-right fa-pull-right w3-text-dark-grey"></i>
+        </a>
+        <hr>
         <a href="<?=ENV_CONSOLE_DOMAIN?>/city/image" class="w3-block">
             <i class="fa-solid fa-image-portrait fa-padding-right w3-text-dark-grey"></i>
             Image

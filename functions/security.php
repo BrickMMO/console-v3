@@ -83,6 +83,7 @@ function security_set_user_session($id)
     $_SESSION['user']['id'] = $user['id'];
     $_SESSION['user']['first'] = $user['first'];
     $_SESSION['user']['last'] = $user['last'];
+    $_SESSION['user']['url'] = $user['url'];
     $_SESSION['user']['admin'] = $user['admin'];
     $_SESSION['user']['session_id'] = password_hash($user['session_id'], PASSWORD_BCRYPT);
     $_SESSION['user']['github_username'] = $user['github_username'];
