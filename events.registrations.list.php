@@ -25,7 +25,7 @@ $result = mysqli_query($connect, $query);
 
 $events_count = mysqli_num_rows($result);
 
-$query = 'SELECT CONCAT(first_name, " ", last_name) AS name, email, participants.created_at, event_name 
+$query = 'SELECT participants.id, CONCAT(first_name, " ", last_name) AS name, email, participants.created_at, event_name 
 FROM participants 
 INNER JOIN events 
 ON events.id = event_id 
@@ -61,7 +61,7 @@ $participants_count = mysqli_num_rows($participants);
     Number total of events: <span class="w3-tag w3-blue"><?=$events_count ?></span> 
 
     Show event: 
-    <select name="filter">
+    <select id="filter" class="w3-blue">
         <?php 
             if (mysqli_num_rows($result)){
                 echo "<option value='Show all' selected>Show all</option>";
@@ -112,7 +112,7 @@ $participants_count = mysqli_num_rows($participants);
                 <?=$participant['event_name']?>
             </td>
             <td>
-                <a href="#" onclick="return confirmModal('Are you sure you want to delete the tag <?=$record['name']?>?', '/media/tags/delete/<?=$record['id']?>');">
+                <a href="#" onclick="return confirmModal('Are you sure you want to delete the tag <?=$participant['name']?>?', '/events/registrations/delete/<?=$participant['event_name']?>');">
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
             </td>
@@ -130,15 +130,21 @@ $participants_count = mysqli_num_rows($participants);
 
 <?php endif; ?>
 
-<button class="w3-button w3-white w3-border" id="see-more">See More</button>
+<div class="w3-container w3-center">
+    <button class="w3-button w3-white w3-border w3-text-orange" id="moreParticipants">Show More</button>
+</div>
 
 <script>
 
     let participants = document.querySelectorAll('.participant-row');
-    let btn = document.getElementById('see-more');
+    let btn = document.getElementById('moreParticipants');
+    let slctFilter = document.getElementById('filter');
+
+    slctFilter.onchange = filterFtn;
+
     btn.style.display = "none";
 
-    btn.onclick = seeMore;
+    btn.onclick = showMore;
 
     let isButtonDisplayed = false;
 
@@ -153,9 +159,25 @@ $participants_count = mysqli_num_rows($participants);
         }
     });
 
-    function seeMore(){
+    function showMore(){
         participants.forEach((participant, index) => {
             participant.style.display = 'table-row';
+        });
+        btn.style.display = "none";
+    }
+
+    function filterFtn(){        
+        participants.forEach((participant, index) => {
+            if(slctFilter.value === "Show all"){
+                participant.style.display = 'table-row';
+            } else{
+                console.log(slctFilter.value, "****", (participant.children[4].innerText).trim());
+                if(slctFilter.value === (participant.children[4].innerText).trim()){
+                    participant.style.display = 'table-row';
+                } else{
+                    participant.style.display = 'none';
+                }
+            }
         });
         btn.style.display = "none";
     }
