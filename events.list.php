@@ -3,23 +3,6 @@
 security_check();
 admin_check();
 
-if (isset($_GET['delete'])) 
-{
-
-    $query = 'DELETE FROM tags 
-        WHERE id = '.$_GET['delete'].'
-        LIMIT 1';
-    mysqli_query($connect, $query);
-
-    $query = 'DELETE FROM media_tag
-        WHERE medium_id = '.$_GET['delete'];
-    mysqli_query($connect, $query);
-
-    message_set('Delete Success', 'Tag has been deleted.');
-    header_redirect('/media/tags');
-    
-}
-
 define('APP_NAME', 'Events');
 
 define('PAGE_TITLE', 'Events list');
@@ -139,12 +122,12 @@ $coming_count = mysqli_num_rows($result_coming);
                 ?>
             </td>
             <td>
-                <a href="/media/tags/edit/<?=$record['id']?>">
+                <a href="/events/edit/<?=$coming['id']?>">
                     <i class="fa-solid fa-pencil"></i>
                 </a>
             </td>
             <td>
-                <a href="#" onclick="return confirmModal('Are you sure you want to delete the tag <?=$record['name']?>?', '/media/tags/delete/<?=$record['id']?>');">
+                <a href="#" onclick="return confirmModal('Are you sure you want to delete the tag <?=$coming['event_name']?>?', '/events/delete/<?=$coming['id']?>');">
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
             </td>
