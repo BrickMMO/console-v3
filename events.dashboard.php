@@ -175,7 +175,7 @@ $events_date_created = mysqli_query($connect, $query);
 <h2>Recent registrations</h2>
 
 <?php
-    $query = 'SELECT event_name, COUNT(events.id) AS "COUNT"
+    $query = 'SELECT event_name, COUNT(events.id) AS "count_participants"
     FROM events 
     INNER JOIN ( 
         SELECT * 
@@ -189,9 +189,43 @@ $events_date_created = mysqli_query($connect, $query);
 
     if (mysqli_num_rows($result)):
         echo "<p>Displaying the <strong>10 most recent registrations</strong></p>";
-    
-    print_r($result)
 ?>
+
+<div class="w3-row">
+
+    <?php while($event = mysqli_fetch_assoc($result)): ?>
+
+        <div class="w3-col l3 m5 s12 w3-border w3-margin-right w3-margin-bottom">
+            <div class="w3-container">
+                <p><strong><span class="w3-text-orange" style="font-size: 12px">Event:</span> <br> <?=$event['event_name']?></strong></p>
+                <?php 
+                    $query = 'SELECT first_name, last_name, email, participants.created_at 
+                    FROM participants 
+                    INNER JOIN events 
+                    ON events.id = event_id 
+                    WHERE event_name = "'. $event['event_name'] .'" 
+                    LIMIT '.$event['count_participants'];
+                
+                    $participants = mysqli_query($connect, $query);
+                    while($participant = mysqli_fetch_assoc($participants)):
+                ?>
+                <p style="font-size: 12px">Name: <strong><?=$participant['first_name'] . $participant['last_name']?></strong>
+                <br> Email: <strong><?=$participant['email']?></strong>
+                <br> Created: <strong><?=$participant['created_at']?></strong></p>
+                <?php endwhile; ?>
+            </div>
+        </div>
+
+    <?php endwhile; ?>
+
+</div>
+
+<?php else: ?>
+
+    <p>
+        There are not registrations yet. 
+        <a href="https://events.brickmmo.com/">Add a new Event</a>.
+    </p>
 
 <?php endif; ?>
 
