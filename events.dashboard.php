@@ -211,7 +211,10 @@ $events_date_created = mysqli_query($connect, $query);
                 ?>
                 <p style="font-size: 12px">Name: <strong><?=$participant['first_name'] . $participant['last_name']?></strong>
                 <br> Email: <strong><?=$participant['email']?></strong>
-                <br> Created: <strong><?=$participant['created_at']?></strong></p>
+                <?php 
+                    $created_at = new DateTime($participant['created_at']);
+                ?>
+                <br> Created: <strong><?=$created_at->format('Y/m/d')?></strong></p>
                 <?php endwhile; ?>
             </div>
         </div>
