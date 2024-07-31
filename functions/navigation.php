@@ -114,6 +114,37 @@ function navigation_array($selected = false)
                             'icon' => 'bm-events',
                             'url' => '/events/dashboard',
                             'title' => 'Events',
+                            'sub-pages' => [
+                                [
+                                    'title' => 'Dashboard',
+                                    'url' => '/events/dashboard',
+                                    'colour' => 'red'
+                                ],[
+                                    'title' => 'Event List',
+                                    'url' => '/events/list',
+                                    'colour' => 'red'
+                                ],[
+                                    'title' => 'Registration List',
+                                    'url' => '/events/registrations/list',
+                                    'colour' => 'red'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Visit Events App',
+                                    'url' => 'https://events.brickmmo.com',
+                                    'colour' => 'orange'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Uptime Report',
+                                    'url' => '/uptime/events',
+                                    'colour' => 'orange'
+                                ],[
+                                    'title' => 'Stats Report',
+                                    'url' => '/uptime/stats',
+                                    'colour' => 'orange'
+                                ]
+                            ]
                         ],[
                             'icon' => 'bm-qr-codes',
                             'url' => '/qr-codes/dashboard',
