@@ -7,7 +7,7 @@ define('APP_NAME', 'GitHub Scanner');
 
 define('PAGE_TITLE', 'Dashboard');
 define('PAGE_SELECTED_SECTION', 'admin-tools');
-define('PAGE_SELECTED_SUB_PAGE', '/github/dashboard');
+define('PAGE_SELECTED_SUB_PAGE', '/github/results');
 
 include('templates/html_header.php');
 include('templates/nav_header.php');
@@ -44,7 +44,7 @@ $result = mysqli_query($connect, $query);
     Scan Results
 </p>
 <hr />
-<h2>Repo List</h2>
+<h2>Repo Scan Details</h2>
 
 <table class="w3-table w3-bordered w3-striped w3-margin-bottom">
     <tr>
