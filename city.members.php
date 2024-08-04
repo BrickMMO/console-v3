@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     if (
         !validate_blank($_POST['name']) || 
         !validate_number($_POST['width']) || 
-        !validate_number($_POST['length']))
+        !validate_number($_POST['height']))
     {
         message_set('Login Error', 'There was an error with your profile information.', 'red');
         header_redirect('/city/profile');
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     $query = 'UPDATE cities SET
         name = "'.addslashes($_POST['name']).'",
         width = "'.addslashes($_POST['width']).'",
-        length = "'.addslashes($_POST['length']).'"
+        height = "'.addslashes($_POST['height']).'"
         WHERE id = '.$_SESSION['city']['id'].'
         LIMIT 1';
     mysqli_query($connect, $query);
