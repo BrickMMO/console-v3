@@ -23,5 +23,24 @@
     <!-- Script JavaScript File -->
     <script src="/script.js"></script>
 
+    <?php if(!isset($_SESSION['timezone'])): ?>
+
+      <script>
+
+      let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      let now = new Date();
+      let offset = now.getTimezoneOffset();
+
+      async function setTimezone() {
+        const response = await fetch('/ajax/timezone/'+offset+'/'+timezone);
+      }
+
+      setTimezone();
+
+      </script>
+
+    <?php endif; ?>
+
   </head>
   <body>

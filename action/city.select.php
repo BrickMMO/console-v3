@@ -1,12 +1,12 @@
 <?php
 
-$query = 'UPDATE users SET
-    city_id = '.$_GET['id'].'
-    WHERE id = '.$_SESSION['user']['id'].'
-    LIMIT 1';
-mysqli_query($connect, $query);
+security_check();
 
-security_set_user_session($_SESSION['user']['id']);
+$_city = city_fetch($_GET['id']);
 
-message_set('Success', 'You are now working on '.$_SESSION['city']['name'].'.');
+user_set_city($_user['id'], $_city['id']);
+
+security_set_user_session($_user['id']);
+
+message_set('City Selection Success', 'You are now working on '.$_city['name'].'.');
 header_redirect(ENV_CONSOLE_DOMAIN.'/city/dashboard');

@@ -3,6 +3,7 @@
 use \WideImage\WideImage;
 
 security_check();
+city_check();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
@@ -11,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     if (
         !validate_image($_FILES['image']))
     {
-        message_set('Image Error', 'There was an error with your uploaded image.', 'red');
+        message_set('Image Error', 'There was an error with your uploaded image. Image may be wrong type or size.', 'red');
         header_redirect('/city/image');
     }
 
@@ -22,16 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
     $query = 'UPDATE cities SET
         image = "'.addslashes($image).'"
-        WHERE id = '.$_SESSION['city']['id'].'
+        WHERE id = '.$_city['id'].'
         LIMIT 1';
     mysqli_query($connect, $query);
     
-    message_set('Success', 'Your image has been updated.');
+    message_set('Image Success', 'Your profile image has been updated.');
     header_redirect('/city/dashboard');
     
 }
 
-define('APP_NAME', $_SESSION['city']['name']);
+define('APP_NAME', $_city['name']);
 
 define('PAGE_TITLE', 'Image');
 define('PAGE_SELECTED_SECTION', '');
@@ -54,7 +55,7 @@ include('templates/message.php');
         height="50"
         style="vertical-align: top"
     />
-    <?=$_SESSION['city']['name']?>
+    <?=$_city['name']?>
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 

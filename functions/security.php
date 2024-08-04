@@ -6,15 +6,16 @@ function security_is_logged_in()
     if(isset($_COOKIE['hash_id']) && isset($_COOKIE['hash_string']))
     {
 
-        $user['id'] = security_decrypt($_COOKIE['hash_id']);
-        $user = user_fetch($user['id']);
+        $id = security_decrypt($_COOKIE['hash_id']);
+        $user = user_fetch($id);
 
         if(!$user) return false;
         else if($user['password'] != security_decrypt($_COOKIE['hash_string'])) return false;
 
-        if(!isset($_SESSION['user'])) 
+        if(!isset($_SESSION['user']))
         {
-            security_set_user_session($user['id']);
+            security_set_user_session($id);
+            header_redirect($_SERVER["REQUEST_URI"]);
         }
 
         security_extend_cookie();
@@ -25,7 +26,7 @@ function security_is_logged_in()
         return false;
     }
 
-    if(isset($_SESSION['user']) and isset($_SESSION['user']['id']))
+    if(isset($_SESSION['user']) && isset($_SESSION['user']['id']))
     {
 
         if(isset($_SESSION['user']['session_id']))
@@ -82,6 +83,7 @@ function security_set_user_session($id)
     $_SESSION['user']['id'] = $user['id'];
     $_SESSION['user']['first'] = $user['first'];
     $_SESSION['user']['last'] = $user['last'];
+    $_SESSION['user']['url'] = $user['url'];
     $_SESSION['user']['admin'] = $user['admin'];
     $_SESSION['user']['session_id'] = password_hash($user['session_id'], PASSWORD_BCRYPT);
     $_SESSION['user']['github_username'] = $user['github_username'];
@@ -90,13 +92,11 @@ function security_set_user_session($id)
 
     if($city = city_fetch($user['city_id']))
     {
-
         $_SESSION['city']['id'] = $city['id'];
         $_SESSION['city']['name'] = $city['name'];
         $_SESSION['city']['width'] = $city['width'];
         $_SESSION['city']['height'] = $city['height'];
         $_SESSION['city']['image'] = $city['image'];
-
     }
 
 }

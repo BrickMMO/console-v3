@@ -1,6 +1,7 @@
 <?php
 
 security_check();
+city_check();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
@@ -11,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         !validate_number($_POST['width']) || 
         !validate_number($_POST['height']))
     {
-        message_set('Login Error', 'There was an error with your profile information.', 'red');
+        message_set('City Profile Error', 'There was an error with your city profile information.', 'red');
         header_redirect('/city/profile');
     }
 
@@ -19,16 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         name = "'.addslashes($_POST['name']).'",
         width = "'.addslashes($_POST['width']).'",
         height = "'.addslashes($_POST['height']).'"
+<<<<<<< HEAD
         WHERE id = '.$_SESSION['city']['id'].'
+=======
+        WHERE id = '.$_city['id'].'
+>>>>>>> d03d79dae1e8534c2a4716801758cb8fdf6c5a38
         LIMIT 1';
     mysqli_query($connect, $query);
 
-    message_set('Success', 'Your city profile has been updated.');
+    message_set('City Profile Success', 'Your city profile has been updated.');
     header_redirect('/city/dashboard');
     
 }
 
-define('APP_NAME', $_SESSION['city']['name']);
+define('APP_NAME', $_city['name']);
 
 define('PAGE_TITLE', 'City Profile');
 define('PAGE_SELECTED_SECTION', '');
@@ -41,7 +46,7 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$city = city_fetch($_SESSION['city']['id']);
+$city = city_fetch($_city['id']);
 
 ?>
 
@@ -53,7 +58,7 @@ $city = city_fetch($_SESSION['city']['id']);
         height="50"
         style="vertical-align: top"
     />
-    <?=$_SESSION['city']['name']?>
+    <?=$_city['name']?>
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
@@ -107,7 +112,7 @@ $city = city_fetch($_SESSION['city']['id']);
         Height <span id="height-error" class="w3-text-red"></span>
     </label>
 
-    <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="validateMainForm();">
+    <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="return validateMainForm();">
         <i class="fa-solid fa-pen fa-padding-right"></i>
         Update Profile
     </button>

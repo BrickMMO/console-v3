@@ -1,10 +1,12 @@
 <?php
 
 security_check();
+city_check();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+if (isset($_GET['uninvite'])) 
 {
 
+<<<<<<< HEAD
     die();
     
     // Basic serverside validation
@@ -12,25 +14,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         !validate_blank($_POST['name']) || 
         !validate_number($_POST['width']) || 
         !validate_number($_POST['height']))
+=======
+    if(!$user = user_fetch($_GET['uninvite']))
+>>>>>>> d03d79dae1e8534c2a4716801758cb8fdf6c5a38
     {
-        message_set('Login Error', 'There was an error with your profile information.', 'red');
-        header_redirect('/city/profile');
+        message_set('Delete Error', 'There was an error removing this member from the city.', 'red');
+        header_redirect('/city/members');
     }
 
+<<<<<<< HEAD
     $query = 'UPDATE cities SET
         name = "'.addslashes($_POST['name']).'",
         width = "'.addslashes($_POST['width']).'",
         height = "'.addslashes($_POST['height']).'"
         WHERE id = '.$_SESSION['city']['id'].'
+=======
+    $query = 'DELETE FROM city_user 
+        WHERE user_id = '.$user['id'].'
+        AND city_id = '.$_city['id'].'
         LIMIT 1';
     mysqli_query($connect, $query);
 
-    message_set('Success', 'Your city profile has been updated.');
+    $query = 'UPDATE users SET
+        city_id = NULL
+        WHERE id = '.$user['id'].'
+        AND city_id = '.$_city['id'].'
+>>>>>>> d03d79dae1e8534c2a4716801758cb8fdf6c5a38
+        LIMIT 1';
+    mysqli_query($connect, $query);
+
+    user_set_city();
+
+    message_set('Delete Success', 'Member has been removed from this city.');
     header_redirect('/city/dashboard');
     
 }
 
-define('APP_NAME', $_SESSION['city']['name']);
+define('APP_NAME', $_city['name']);
 
 define('PAGE_TITLE', 'Members');
 define('PAGE_SELECTED_SECTION', '');
@@ -43,12 +63,10 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$city = city_fetch($_SESSION['city']['id']);
-
-$query = 'SELECT users.*
+$query = 'SELECT users.*,city_user.*
     FROM users
     INNER JOIN city_user ON users.id = city_user.user_id
-    WHERE city_user.city_id = '.$_SESSION['city']['id'].'
+    WHERE city_user.city_id = '.$_city['id'].'
     ORDER BY last,first';
 $result = mysqli_query($connect, $query);
 
@@ -62,7 +80,7 @@ $result = mysqli_query($connect, $query);
         height="50"
         style="vertical-align: top"
     />
-    <?=$_SESSION['city']['name']?>
+    <?=$_city['name']?>
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
@@ -85,13 +103,13 @@ $result = mysqli_query($connect, $query);
         <tr>
             <td>
                 <img
-                    src="<?=user_avatar();?>"
+                    src="<?=user_avatar($record['user_id']);?>"
                     style="height: 25px"
                     class="w3-circle"
                 />
             </td>
             <td>
-                <?php if($record['city_id'] == $_SESSION['city']['id']): ?>
+                <?php if($record['city_id'] == $_city['id']): ?>
                     <i class="fa-solid fa-lock"></i>
                 <?php endif; ?>
             </td>
@@ -107,8 +125,8 @@ $result = mysqli_query($connect, $query);
                 <?php endif; ?>
             </td>
             <td>
-                <?php if($record['city_id'] != $_SESSION['city']['id']): ?>
-                    <a href="/city/uninvite/user/<?=$record['id']?>">
+                <?php if($record['user_id'] != $_user['id'] && $record['user_id'] != $_city['user_id']): ?>
+                    <a href="#" onclick="return confirmModal('Are you sure you want to remove <?=user_name($_user['id'])?> from <?=$_city['name']?>?', '/city/members/uninvite/<?=$record['user_id']?>');">
                         <i class="fa-solid fa-xmark"></i>
                     </a>
                 <?php endif; ?>

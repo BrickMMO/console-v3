@@ -2,7 +2,7 @@
 
 if(!isset($_GET['hash']) or !user_fetch($_GET['hash']))
 {
-    message_set('Hash Error', 'There was an error with the password reset link, please try again.', 'red');
+    message_set('Verification Error', 'There was an error with the password reset link, please try again.', 'red');
     header_redirect('/forgot');
 }
 else
@@ -17,7 +17,7 @@ else
         LIMIT 1';
     mysqli_query($connect, $query);
 
-    message_set('Email Verified', 'Your email address has been verified.');
+    message_set('Verification Success', 'Your email address has been verified.');
     header_redirect('/login');
     
 }

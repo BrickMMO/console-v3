@@ -1,8 +1,9 @@
 <?php
 
 security_check();
+city_check();
 
-define('APP_NAME', $_SESSION['city']['name']);
+define('APP_NAME', $_city['name']);
 
 define('PAGE_TITLE', 'Dashboard');
 define('PAGE_SELECTED_SECTION', '');
@@ -19,9 +20,9 @@ include('templates/main_header.php');
 
 <div class="w3-center">
 
-    <a href="<?=ENV_CONSOLE_DOMAIN?>/city/image-">
+    <a href="<?=ENV_CONSOLE_DOMAIN?>/city/image">
         <img
-            src="<?=city_avatar();?>"
+            src="<?=city_avatar($_city['id']);?>"
             style="height: 100px"
             class="w3-circle w3-margin-top"
         />
@@ -29,7 +30,7 @@ include('templates/main_header.php');
     
     <h1 class="w3-margin-top w3-margin-bottom">
         You're working in 
-        <?=$_SESSION['city']['name']?>
+        <?=$_city['name']?>
     </h1>
 
     <p>Manage your BrickMMO city profile, image, and members.</p>
@@ -42,6 +43,12 @@ include('templates/main_header.php');
         <a href="<?=ENV_CONSOLE_DOMAIN?>/city/profile" class="w3-display-container">
             <i class="fa-solid fa-city fa-padding-right w3-text-dark-grey"></i>
             City Profile
+            <i class="fa-solid fa-chevron-right fa-pull-right w3-text-dark-grey"></i>
+        </a>
+        <hr>
+        <a href="<?=ENV_CONSOLE_DOMAIN?>/city/url" class="w3-display-container">
+            <i class="fa-solid fa-globe fa-padding-right w3-text-dark-grey"></i>
+            URL
             <i class="fa-solid fa-chevron-right fa-pull-right w3-text-dark-grey"></i>
         </a>
         <hr>

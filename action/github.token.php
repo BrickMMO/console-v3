@@ -32,27 +32,25 @@ $avatar = image_to_bas64($github_user['avatar_url']);
 /*
  * Check if logged in user matches GitHub email
  */
-if(isset($_SESSION['user']))
+if($_user)
 {
-
-    $user = user_fetch($_SESSION['user']['id']);
 
     $query = 'SELECT *
         FROM users
         WHERE github_username = "'.addslashes($github_user['login']).'"
-        AND id != '.$user['id'].'
+        AND id != '.$_user['id'].'
         LIMIT 1';
     $result = mysqli_query($connect, $query);
 
     if(mysqli_num_rows($result))
     {
-        message_set('GitHub Error', 'There was an error authenticating your GitHub account. The GitHub account '.$github_user['login'].' is already associated to another BrickMMO account.', 'red');
+        message_set('GitHub Error', 'The GitHub account '.$github_user['login'].' is already associated to another BrickMMO account.', 'red');
         header_redirect('/account/dashboard');
     }
 
     foreach($emails as $key => $email)
     {
-        if($user['email'] == $email['email'])
+        if($_user['email'] == $email['email'])
         {
             $email = $email['email'];
             break;
@@ -61,7 +59,7 @@ if(isset($_SESSION['user']))
 
     if(!isset($email))
     {
-        message_set('GitHub Error', 'The account you are currently logged in as and the GitHub account do not have matching emails.');
+        message_set('GitHub Error', 'The account you are currently logged in as and the GitHub account do not have matching emails. To resolve this add your BrickMMO email address to your GitHub account. ');
         header_redirect('/account/dashboard');
     }
 
@@ -73,10 +71,10 @@ if(isset($_SESSION['user']))
         LIMIT 1';
     mysqli_query($connect, $query);
 
-    security_set_user_session($user['id']);
-    security_set_user_cookie($user['id']);
+    security_set_user_session($_user['id']);
+    security_set_user_cookie($_user['id']);
 
-    message_set('GitHub Success', 'Your GitHub account has been connected.');
+    message_set('GitHub Success', 'Your GitHub account has been connected to your BrickMMO account.');
     header_redirect('/account/dashboard');
 
 }
@@ -119,7 +117,7 @@ if($user)
     security_set_user_session($user['id']);
     security_set_user_cookie($user['id']);
 
-    message_set('Login Success', 'You have been logged in.');
+    message_set('GitHub Success', 'You have been logged in using your GitHub account.');
     header_redirect('/account/dashboard');
 
 }
@@ -171,10 +169,10 @@ include(__DIR__.'/templates/email_register.php');
 $message = ob_get_contents();
 ob_end_clean();
 
-email_send($user['email'], $user['first'].' '.$user['last'], $message);
+email_send($user['email'], user_name($user['id']), $message, 'Email Verification');
 
 security_set_user_session($user['id']);
 security_set_user_cookie($user['id']);
 
-message_set('Success', 'Your account has been created and you have been logged in. You will receive an email with a link to confirm your email address.');
+message_set('GitHub Success', 'Your BrickMMO account has been created and you have been logged in. You will receive an email with a link to confirm your email address.');
 header_redirect('/account/dashboard');

@@ -1,6 +1,6 @@
 <?php
 
-$navigation = navigation_array(PAGE_FILE);
+$navigation = navigation_array(PAGE_SELECTED_SUB_PAGE);
 
 ?>
 
