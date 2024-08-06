@@ -128,7 +128,7 @@ $result = mysqli_query($connect, $query);
         class="w3-input w3-border" 
         type="text" 
         id="first_name" 
-        
+        autocomplete="off"
         value= <?=$participant['first_name']?>
     />
     <label for="first_name" class="w3-text-gray">
