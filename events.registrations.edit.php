@@ -16,7 +16,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST')
     // Basic serverside validation
     if (!validate_blank($_POST['first_name']) || !validate_blank($_POST['last_name']) || !validate_blank($_POST['email']))
     {
-        message_set('Registration Error', 'There was an error with the provided tag.', 'red');
+        message_set('Registration Error', 'There was an error with the provided registration.', 'red');
         header_redirect('/events/registrations/list');
     }
     

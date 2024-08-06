@@ -140,13 +140,12 @@ $coming_count = mysqli_num_rows($result_coming);
 
 <p>
     There are not events yet. 
-    <a href="https://events.brickmmo.com/">Add a new Event</a>.
 </p>
 
 <?php endif; ?>
 
 <a
-    href="https://events.brickmmo.com/"
+    href="/events/add"
     class="w3-button w3-white w3-border"
 >
     <i class="fa-solid fa-plus"></i> Add New Event
