@@ -3,53 +3,46 @@
 security_check();
 admin_check();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+if(
+    !isset($_GET['key']) || 
+    !is_numeric($_GET['key']))
+{
+    message_set('Event Error', 'There was an error with the provided event.', 'red');
+    header_redirect('/events/list');
+}
+elseif ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
 
     // Basic serverside validation
     if (!validate_blank($_POST['event_name']) || !validate_blank($_POST['start_date']) || !validate_blank($_POST['end_date']) || !validate_blank($_POST['description']) || !validate_blank($_POST['organizer']) || !validate_blank($_POST['location']) || !validate_blank($_POST['detail_description']) || !validate_blank($_POST['max_capacity']))
     {
-        message_set('Event Error', 'There was an error with the Event.', 'red');
+        message_set('Event Error', 'There was an error with the provided event.', 'red');
         header_redirect('/events/list');
     }
     
-    $query = 'INSERT INTO events (
-            event_name,
-            start_date,
-            end_date,
-            description,
-            organizer, 
-            location, 
-            detail_description, 
-            max_capacity,
-            tickets_bought,
-            price,
-            created_at,
-            updated_at
-        ) VALUES (
-            "'.$_POST['event_name'].'",
-            "'.$_POST['start_date'].'",
-            "'.$_POST['end_date'].'",
-            "'.$_POST['description'].'",
-            "'.$_POST['organizer'].'",
-            "'.$_POST['location'].'",
-            "'.$_POST['detail_description'].'",
-            "'.$_POST['max_capacity'].'",
-            0,
-            0.00,
-            NOW(),
-            NOW()
-        )';
+    $query = 'UPDATE events SET
+        event_name = "'.$_POST['event_name'].'",
+        start_date = "'.$_POST['start_date'].'",
+        end_date = "'.$_POST['end_date'].'",
+        description = "'.$_POST['description'].'",
+        organizer = "'.$_POST['organizer'].'",
+        location = "'.$_POST['location'].'",
+        detail_description = "'.$_POST['detail_description'].'",
+        max_capacity = "'.$_POST['max_capacity'].'",
+        updated_at = NOW()
+        WHERE id = '.$_GET['key'].'
+        LIMIT 1';
+        
     mysqli_query($connect, $query);
 
-    message_set('Event Success', 'Your event has been added.');
+    message_set('Event Success', 'The event has been edited.');
     header_redirect('/events/list');
     
 }
 
 define('APP_NAME', 'Events');
 
-define('PAGE_TITLE', 'Add Event');
+define('PAGE_TITLE', 'Edit Event');
 define('PAGE_SELECTED_SECTION', 'admin-content');
 define('PAGE_SELECTED_SUB_PAGE', '/events/list');
 
@@ -61,6 +54,13 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
+$query = 'SELECT *
+    FROM events
+    WHERE id = "'.$_GET['key'].'"
+    LIMIT 1';
+
+$result = mysqli_query($connect, $query);
+
 ?>
 
 <!-- CONTENT -->
@@ -71,18 +71,24 @@ include('templates/message.php');
         height="50"
         style="vertical-align: top"
     />
-    Events
+    Events - Edit
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
     <a href="/events/dashboard">Events</a> / 
-    <a href="/events/registrations/list">Registrations List</a> / 
-    Add Event
+    <a href="/events/list">Event List</a> /
+    Edit 
+    <?php
+        if(mysqli_num_rows($result)){
+            $event = mysqli_fetch_assoc($result);
+            echo $event['event_name'];
+        }
+    ?>
 </p>
 
 <hr />
 
-<h2>Add Event</h2>
+<h2>Edit Event: <?=$event['event_name']?></h2>
 
 <form
     method="post"
@@ -96,6 +102,7 @@ include('templates/message.php');
         type="text" 
         id="event_name" 
         autocomplete="off"
+        value="<?=$event['event_name']?>"
     />
     <label for="event_name" class="w3-text-gray">
         Event Name <span id="event_name_error" class="w3-text-red"></span>
@@ -107,6 +114,7 @@ include('templates/message.php');
         type="datetime-local" 
         id="start_date" 
         autocomplete="off"
+        value="<?=$event['start_date']?>"
     />
     <label for="start_date" class="w3-text-gray">
         Start Date <span id="start_date_error" class="w3-text-red"></span>
@@ -118,6 +126,7 @@ include('templates/message.php');
         type="datetime-local" 
         id="end_date" 
         autocomplete="off"
+        value="<?=$event['end_date']?>"
     />
     <label for="end_date" class="w3-text-gray">
         End Date <span id="end_date_error" class="w3-text-red"></span>
@@ -128,6 +137,7 @@ include('templates/message.php');
         class="w3-input w3-border" 
         id="description"
         rows="3">
+    <?=$event['description']?>
     </textarea>
     <label for="description" class="w3-text-gray">
         Description <span id="description_error" class="w3-text-red"></span>
@@ -139,6 +149,7 @@ include('templates/message.php');
         type="text" 
         id="organizer" 
         autocomplete="off"
+        value="<?=$event['organizer']?>"
     />
     <label for="organizer" class="w3-text-gray">
         Organizer <span id="organizer_error" class="w3-text-red"></span>
@@ -150,6 +161,7 @@ include('templates/message.php');
         type="text" 
         id="location" 
         autocomplete="off"
+        value="<?=$event['location']?>"
     />
     <label for="location" class="w3-text-gray">
         Location <span id="location_error" class="w3-text-red"></span>
@@ -160,6 +172,7 @@ include('templates/message.php');
         class="w3-input w3-border" 
         id="detail_description"
         rows="3">
+        <?=$event['detail_description']?>
     </textarea>
     <label for="detail_description" class="w3-text-gray">
         Details description <span id="detail_description_error" class="w3-text-red"></span>
@@ -172,15 +185,15 @@ include('templates/message.php');
         id="max_capacity" 
         autocomplete="off"
         min="0"
-        value="0"
+        value="<?=$event['max_capacity']?>"
     />
     <label for="max_capacity" class="w3-text-gray">
         max_capacity <span id="max_capacity_error" class="w3-text-red"></span>
     </label>
 
     <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top">
-        <i class="fa-solid fa-plus"></i>
-        Add Event
+        <i class="fa-solid fa-pencil"></i>
+        Update Event
     </button>
 </form>
 

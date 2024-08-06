@@ -105,7 +105,7 @@ $result = mysqli_query($connect, $query);
     <input 
         type="hidden" 
         id="event_attending_id" 
-        value= <?=$participant['event_id']?>
+        value=<?=$participant['event_id']?>
     />
 
     <select name="event_id" id="event" class="w3-input w3-border">
@@ -129,7 +129,7 @@ $result = mysqli_query($connect, $query);
         type="text" 
         id="first_name" 
         autocomplete="off"
-        value= <?=$participant['first_name']?>
+        value="<?=$participant['first_name']?>"
     />
     <label for="first_name" class="w3-text-gray">
         First Name <span id="first_name_error" class="w3-text-red"></span>
@@ -141,7 +141,7 @@ $result = mysqli_query($connect, $query);
         type="text" 
         id="last_name" 
         autocomplete="off"
-        value= <?=$participant['last_name']?>
+        value="<?=$participant['last_name']?>"
     />
     <label for="last_name" class="w3-text-gray">
         Last Name <span id="last_name_error" class="w3-text-red"></span>
@@ -153,7 +153,7 @@ $result = mysqli_query($connect, $query);
         type="text" 
         id="email" 
         autocomplete="off"
-        value= <?=$participant['email']?>
+        value="<?=$participant['email']?>"
     />
     <label for="email" class="w3-text-gray">
         Email <span id="email_error" class="w3-text-red"></span>
