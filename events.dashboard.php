@@ -210,7 +210,7 @@ $events_date_created = mysqli_query($connect, $query);
                     $participants = mysqli_query($connect, $query);
                     while($participant = mysqli_fetch_assoc($participants)):
                 ?>
-                <p style="font-size: 12px">Name: <strong><?=$participant['first_name'] . $participant['last_name']?></strong>
+                <p style="font-size: 12px">Name: <strong><?=$participant['first_name'] . " " .  $participant['last_name']?></strong>
                 <br> Email: <strong><?=$participant['email']?></strong>
                 <?php 
                     $created_at = new DateTime($participant['created_at']);
