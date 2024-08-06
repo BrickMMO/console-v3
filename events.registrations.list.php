@@ -3,6 +3,19 @@
 security_check();
 admin_check();
 
+if (isset($_GET['delete'])) 
+{
+
+    $query = 'DELETE FROM participants 
+        WHERE id = '.$_GET['delete'].'
+        LIMIT 1';
+    mysqli_query($connect, $query);
+
+    message_set('Delete Success', 'Registration has been deleted.');
+    header_redirect('/events/registrations/list');
+    
+}
+
 define('APP_NAME', 'Events');
 
 define('PAGE_TITLE', 'Registrations list');
@@ -96,6 +109,7 @@ $participants_count = mysqli_num_rows($participants);
         <th>Date Registration</th>
         <th>Event</th>
         <th class="bm-table-icon"></th>
+        <th class="bm-table-icon"></th>
     </tr>
 
     <?php foreach($participants as $index => $participant): ?>
@@ -119,7 +133,12 @@ $participants_count = mysqli_num_rows($participants);
                 <?=$participant['event_name']?>
             </td>
             <td>
-                <a href="#" onclick="return confirmModal('Are you sure you want to delete the tag <?=$participant['name']?>?', '/events/registrations/delete/<?=$participant['event_name']?>');">
+                <a href="/events/registrations/edit/<?=$participant['id']?>">
+                    <i class="fa-solid fa-pencil"></i>
+                </a>
+            </td>
+            <td>
+                <a href="#" onclick="return confirmModal('Are you sure you want to delete the participant: <strong><?=$participant['name']?></strong>, who is attending the event: <strong><?=$participant['event_name']?></strong>?', '/events/registrations/list/delete/<?=$participant['id']?>');">
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
             </td>

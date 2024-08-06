@@ -203,7 +203,8 @@ $events_date_created = mysqli_query($connect, $query);
                     FROM participants 
                     INNER JOIN events 
                     ON events.id = event_id 
-                    WHERE event_name = "'. $event['event_name'] .'" 
+                    WHERE event_name = "'. $event['event_name'] .'"
+                    ORDER BY participants.created_at DESC 
                     LIMIT '.$event['count_participants'];
                 
                     $participants = mysqli_query($connect, $query);
