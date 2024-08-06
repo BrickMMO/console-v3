@@ -75,6 +75,13 @@ $participants_count = mysqli_num_rows($participants);
 
 <hr />
 
+<a
+    href="/events/registrations/add"
+    class="w3-button w3-white w3-border"
+>
+    <i class="fa-solid fa-plus"></i> Add New Registration
+</a>
+
 <h2>Registrations List</h2>
 
 <?php
