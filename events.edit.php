@@ -21,14 +21,14 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST')
     }
     
     $query = 'UPDATE events SET
-        event_name = "'.$_POST['event_name'].'",
-        start_date = "'.$_POST['start_date'].'",
-        end_date = "'.$_POST['end_date'].'",
-        description = "'.$_POST['description'].'",
-        organizer = "'.$_POST['organizer'].'",
-        location = "'.$_POST['location'].'",
-        detail_description = "'.$_POST['detail_description'].'",
-        max_capacity = "'.$_POST['max_capacity'].'",
+        event_name = "'.addslashes($_POST['event_name']).'",
+        start_date = "'.addslashes($_POST['start_date']).'",
+        end_date = "'.addslashes($_POST['end_date']).'",
+        description = "'.addslashes($_POST['description']).'",
+        organizer = "'.addslashes($_POST['organizer']).'",
+        location = "'.addslashes($_POST['location']).'",
+        detail_description = "'.addslashes($_POST['detail_description']).'",
+        max_capacity = "'.addslashes($_POST['max_capacity']).'",
         updated_at = NOW()
         WHERE id = '.$_GET['key'].'
         LIMIT 1';

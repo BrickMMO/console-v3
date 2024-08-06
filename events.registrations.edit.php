@@ -21,10 +21,10 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST')
     }
     
     $query = 'UPDATE participants SET
-        first_name = "'.$_POST['first_name'].'",
-        last_name = "'.$_POST['last_name'].'",
-        email = "'.$_POST['email'].'",
-        event_id = "'.$_POST['event_id'].'",
+        first_name = "'.addslashes($_POST['first_name']).'",
+        last_name = "'.addslashes($_POST['last_name']).'",
+        email = "'.addslashes($_POST['email']).'",
+        event_id = "'.addslashes($_POST['event_id']).'",
         updated_at = NOW()
         WHERE id = '.$_GET['key'].'
         LIMIT 1';

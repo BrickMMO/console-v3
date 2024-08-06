@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             "'.addslashes($_POST['first_name']).'",
             "'.addslashes($_POST['last_name']).'",
             "'.addslashes($_POST['email']).'",
-            "'.$_POST['event_id'].'",
+            "'.addslashes($_POST['event_id']).'",
             NOW(),
             NOW()
         )';
