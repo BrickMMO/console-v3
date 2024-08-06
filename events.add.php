@@ -127,8 +127,7 @@ include('templates/message.php');
         name="description" 
         class="w3-input w3-border" 
         id="description"
-        rows="3">
-    </textarea>
+        rows="3"></textarea>
     <label for="description" class="w3-text-gray">
         Description <span id="description_error" class="w3-text-red"></span>
     </label>
@@ -159,8 +158,7 @@ include('templates/message.php');
         name="detail_description" 
         class="w3-input w3-border" 
         id="detail_description"
-        rows="3">
-    </textarea>
+        rows="3"></textarea>
     <label for="detail_description" class="w3-text-gray">
         Details description <span id="detail_description_error" class="w3-text-red"></span>
     </label>

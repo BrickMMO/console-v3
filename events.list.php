@@ -87,7 +87,6 @@ $coming_count = mysqli_num_rows($result_coming);
         <th>Participants</th>
         <th>Status</th>
         <th class="bm-table-icon"></th>
-        <th class="bm-table-icon"></th>
     </tr>
 
     <?php foreach($result as $index => $coming): ?>
@@ -124,11 +123,6 @@ $coming_count = mysqli_num_rows($result_coming);
             <td>
                 <a href="/events/edit/<?=$coming['id']?>">
                     <i class="fa-solid fa-pencil"></i>
-                </a>
-            </td>
-            <td>
-                <a href="#" onclick="return confirmModal('Are you sure you want to delete the tag <?=$coming['event_name']?>?', '/events/delete/<?=$coming['id']?>');">
-                    <i class="fa-solid fa-trash-can"></i>
                 </a>
             </td>
         </tr>

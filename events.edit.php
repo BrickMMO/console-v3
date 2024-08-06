@@ -136,9 +136,7 @@ $result = mysqli_query($connect, $query);
         name="description" 
         class="w3-input w3-border" 
         id="description"
-        rows="3">
-    <?=$event['description']?>
-    </textarea>
+        rows="3"><?=$event['description']?></textarea>
     <label for="description" class="w3-text-gray">
         Description <span id="description_error" class="w3-text-red"></span>
     </label>
@@ -171,9 +169,7 @@ $result = mysqli_query($connect, $query);
         name="detail_description" 
         class="w3-input w3-border" 
         id="detail_description"
-        rows="3">
-        <?=$event['detail_description']?>
-    </textarea>
+        rows="3"><?=$event['detail_description']?></textarea>
     <label for="detail_description" class="w3-text-gray">
         Details description <span id="detail_description_error" class="w3-text-red"></span>
     </label>
