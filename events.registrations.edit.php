@@ -3,41 +3,42 @@
 security_check();
 admin_check();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+if(
+    !isset($_GET['key']) || 
+    !is_numeric($_GET['key']))
+{
+    message_set('Registration Error', 'There was an error with the provided registration.', 'red');
+    header_redirect('/events/registrations/list');
+}
+elseif ($_SERVER['REQUEST_METHOD'] == 'POST') 
 {
 
     // Basic serverside validation
     if (!validate_blank($_POST['first_name']) || !validate_blank($_POST['last_name']) || !validate_blank($_POST['email']))
     {
-        message_set('Registration Error', 'There was an error with the registration.', 'red');
-        header_redirect('/events/registrations/add');
+        message_set('Registration Error', 'There was an error with the provided tag.', 'red');
+        header_redirect('/events/registrations/list');
     }
     
-    $query = 'INSERT INTO participants (
-            first_name,
-            last_name,
-            email,
-            event_id, 
-            created_at,
-            updated_at
-        ) VALUES (
-            "'.addslashes($_POST['first_name']).'",
-            "'.addslashes($_POST['last_name']).'",
-            "'.addslashes($_POST['email']).'",
-            "'.$_POST['event_id'].'",
-            NOW(),
-            NOW()
-        )';
+    $query = 'UPDATE participants SET
+        first_name = "'.$_POST['first_name'].'",
+        last_name = "'.$_POST['last_name'].'",
+        email = "'.$_POST['email'].'",
+        event_id = "'.$_POST['event_id'].'",
+        updated_at = NOW()
+        WHERE id = '.$_GET['key'].'
+        LIMIT 1';
+        
     mysqli_query($connect, $query);
 
-    message_set('Registration Success', 'Your registration has been added.');
+    message_set('Registration Success', 'The registration has been edited.');
     header_redirect('/events/registrations/list');
     
 }
 
 define('APP_NAME', 'Events');
 
-define('PAGE_TITLE', 'Add Registration');
+define('PAGE_TITLE', 'Edit Registration');
 define('PAGE_SELECTED_SECTION', 'admin-content');
 define('PAGE_SELECTED_SUB_PAGE', '/events/registrations');
 
@@ -49,9 +50,10 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$query = 'SELECT 
-    id, event_name, max_capacity, tickets_bought FROM events
-    ORDER BY start_date';
+$query = 'SELECT *
+    FROM participants
+    WHERE id = "'.$_GET['key'].'"
+    LIMIT 1';
 
 $result = mysqli_query($connect, $query);
 
@@ -65,18 +67,34 @@ $result = mysqli_query($connect, $query);
         height="50"
         style="vertical-align: top"
     />
-    Events - Registration
+    Events - Edit Registration
 </h1>
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
     <a href="/events/dashboard">Events</a> / 
-    <a href="/events/registrations/list">Registrations List</a> / 
-    Add Registration
+    <a href="/events/registrations/list">Registrations List</a> /
+    Edit 
+    <?php
+        if(mysqli_num_rows($result)){
+            $participant = mysqli_fetch_assoc($result);
+            echo $participant['first_name'] . " " .  $participant['last_name'];
+        }
+    ?>
 </p>
 
 <hr />
 
-<h2>Add Registration</h2>
+<h2>Edit participant: <?=$participant['first_name'] . " " .  $participant['last_name']?></h2>
+
+<?php
+
+$query = 'SELECT 
+    id, event_name, max_capacity, tickets_bought FROM events
+    ORDER BY start_date';
+
+$result = mysqli_query($connect, $query);
+
+?>
 
 <form
     method="post"
@@ -84,11 +102,19 @@ $result = mysqli_query($connect, $query);
     id="main-form"
     onsubmit="return validateMainForm();"
 >
+    <input 
+        type="hidden" 
+        id="event_attending_id" 
+        value= <?=$participant['event_id']?>
+    />
+
     <select name="event_id" id="event" class="w3-input w3-border">
     <?php
         if (mysqli_num_rows($result)){
             while($event = mysqli_fetch_assoc($result)){
-                echo "<option value='".$event['id']."' data-max_capacity='".$event['max_capacity']."' data-tickets_bought='".$event['tickets_bought']."'>".$event['event_name']."</option>";
+                $selected = ($participant['event_id'] === $event['id']) ? 'selected' : '';
+
+                echo "<option value='".$event['id']."' " . $selected . " data-max_capacity='".$event['max_capacity']."' data-tickets_bought='".$event['tickets_bought']."'>".$event['event_name']."</option>";
             }
         }
     ?>
@@ -102,7 +128,8 @@ $result = mysqli_query($connect, $query);
         class="w3-input w3-border" 
         type="text" 
         id="first_name" 
-        autocomplete="off"
+        
+        value= <?=$participant['first_name']?>
     />
     <label for="first_name" class="w3-text-gray">
         First Name <span id="first_name_error" class="w3-text-red"></span>
@@ -114,6 +141,7 @@ $result = mysqli_query($connect, $query);
         type="text" 
         id="last_name" 
         autocomplete="off"
+        value= <?=$participant['last_name']?>
     />
     <label for="last_name" class="w3-text-gray">
         Last Name <span id="last_name_error" class="w3-text-red"></span>
@@ -125,14 +153,15 @@ $result = mysqli_query($connect, $query);
         type="text" 
         id="email" 
         autocomplete="off"
+        value= <?=$participant['email']?>
     />
     <label for="email" class="w3-text-gray">
         Email <span id="email_error" class="w3-text-red"></span>
     </label>
 
     <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top">
-        <i class="fa-solid fa-plus"></i>
-        Add Registration
+        <i class="fa-solid fa-pencil"></i>
+        Update Registration
     </button>
 </form>
 
@@ -144,6 +173,9 @@ $result = mysqli_query($connect, $query);
         let event = document.getElementById("event");
         let event_capacity = event.options[event.selectedIndex].getAttribute("data-max_capacity");
         let tickets_bought = event.options[event.selectedIndex].getAttribute("data-tickets_bought");
+        let event_updating_id = event.options[event.selectedIndex].value;
+
+        let event_attending_id = document.getElementById("event_attending_id");
         
         let first_name = document.getElementById("first_name");
         let last_name = document.getElementById("last_name");
@@ -159,10 +191,12 @@ $result = mysqli_query($connect, $query);
         event_error.innerHTML = "";
         first_name_error.innerHTML = "";
         last_name_error.innerHTML = "";
-        email_error.innerHTML = "";
+        email_error.innerHTML = "";       
         
 
-        if (parseInt(tickets_bought) >= parseInt(event_capacity)) {
+        if ((parseInt(event_attending_id.value) !== parseInt(event_updating_id)) 
+                && 
+            (parseInt(tickets_bought) >= parseInt(event_capacity))) {
             event_error.innerHTML = "(Sorry this event is full)";
             errors++;
         }
