@@ -144,7 +144,7 @@ $result = mysqli_query($connect, $query);
     <a href="https://rebrickable.com/api/">Rebrickable</a> will:
 </p>
 
-<ul>
+<ul class="w3-ul w3-margin-bottom">
     <li>Delete the current colours data.</li>
     <li>Re-import the colour data from <a href="https://rebrickable.com/api/">Rebrickable</a>.</li>
 </ul>

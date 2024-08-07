@@ -36,7 +36,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 define('APP_NAME', 'Media');
 
-define('PAGE_TITLE', 'Add Tag');
+define('PAGE_TITLE','Edit Tag');
 define('PAGE_SELECTED_SECTION', 'admin-content');
 define('PAGE_SELECTED_SUB_PAGE', '/media/tags');
 
@@ -66,12 +66,12 @@ $tag = tag_fetch($_GET['key']);
     <a href="/city/dashboard">Dashboard</a> / 
     <a href="/media/dashboard">Media</a> / 
     <a href="/media/tags">Tags</a> / 
-    Edit <?=$tag['name']?>
+    Edit Tag
 </p>
 
 <hr />
 
-<h2>Edit <?=$tag['name']?></h2>
+<h2>Edit Tag: <?=$tag['name']?></h2>
 
 <form
     method="post"
@@ -93,7 +93,7 @@ $tag = tag_fetch($_GET['key']);
 
     <button class="w3-block w3-btn w3-orange w3-text-white w3-margin-top" onclick="return validateMainForm();">
         <i class="fa-solid fa-tag fa-padding-right"></i>
-        Add Tag
+        Edit Tag
     </button>
 </form>
 

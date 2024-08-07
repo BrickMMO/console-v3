@@ -323,10 +323,6 @@ function navigation_array($selected = false)
                                     'url' => '/github/results',
                                     'colour' => 'red'
                                 ],[
-                                    'title' => 'Rescan GitHub',
-                                    'url' => '/github/rescan',
-                                    'colour' => 'red'
-                                ],[
                                     'br' => '---'
                                 ],[
                                     'title' => 'Stats Report',

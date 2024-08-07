@@ -5,7 +5,7 @@ admin_check();
 
 if (!isset($_GET['key']) || !in_array($_GET['key'], explode(',', setting_fetch('GITHUB_ACCOUNTS'))))
 {
-    message_set('Import Error', 'There was an error importing reops.', 'red');
+    message_set('Import Error', 'There was an error importing repos.', 'red');
     header_redirect('/github/dashboard');
 }
 

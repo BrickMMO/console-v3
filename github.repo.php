@@ -3,6 +3,48 @@
 security_check();
 admin_check();
 
+if(isset($_GET['key']))
+{
+
+    $query = 'SELECT *
+        FROM repos
+        WHERE name = "'.addslashes($_GET['key']).'"
+        ORDER BY error_count DESC';
+    $result = mysqli_query($connect, $query);
+
+    if(!mysqli_num_rows($result))
+    {
+        message_set('Repo Error', 'There was an error loading this repo.', 'red');
+        header_redirect('/github/dashboard');
+    }
+
+    $record = mysqli_fetch_assoc($result);
+
+}
+elseif(isset($_GET['rescan']))
+{
+
+    $query = 'SELECT *
+        FROM repos
+        WHERE name = "'.addslashes($_GET['rescan']).'"
+        ORDER BY error_count DESC';
+    $result = mysqli_query($connect, $query);
+
+    if(!mysqli_num_rows($result))
+    {
+        message_set('Repo Error', 'There was an error loading this repo.', 'red');
+        header_redirect('/github/dashboard');
+    }
+
+    $record = mysqli_fetch_assoc($result);
+
+    github_scan_repo($record['owner'], $record['name']);
+
+    message_set('Repo Success', 'Repo has been rescanned.');
+    header_redirect('/github/repo/'.$record['name']);
+    
+}
+
 define('APP_NAME', 'GitHub Scanner');
 
 define('PAGE_TITLE', 'Dashboard');
@@ -17,14 +59,7 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$github_accounts = setting_fetch('GITHUB_ACCOUNTS');
-$github_last_import = setting_fetch('GITHUB_LAST_IMPORT');
-$github_repos_scanned = setting_fetch('GITHUB_REPOS_SCANNED');
 
-$query = 'SELECT *
-    FROM repos
-    ORDER BY error_count DESC';
-$result = mysqli_query($connect, $query);
 
 ?>
 
@@ -41,88 +76,34 @@ $result = mysqli_query($connect, $query);
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
     <a href="/github/dashboard">GitHub Tools</a> / 
-    Scan Results
+    <a href="/github/results">Scan Results</a> / 
+    Repo Scan Details    
 </p>
 <hr />
-<h2>Repo Scan Details</h2>
+<h2>Repo Scan Details: <?=$record['name']?></h2>
 
-<table class="w3-table w3-bordered w3-striped w3-margin-bottom">
-    <tr>
-        <th>Name</th>
-        <th class="bm-table-number">Errors</th>
-        <th>Last Scanned</th>
-    </tr>
-
-    <?php while($record = mysqli_fetch_assoc($result)): ?>
-        <tr>
-            <td>
-                <a href="/github/repo/<?=$record['name']?>">
-                    <i class="fa-brands fa-github" aria-hidden="true"></i> /<?=$record['owner']?>/<?=$record['name']?>
-                </a>
-            </td>
-            <td>
-                <?=$record['error_count']?>
-            </td>
-            <td>
-                <?=time_elapsed_string($record['updated_at'])?>
-            </td>
-        </tr>
-    <?php endwhile; ?>
-
-</table>
-
-
-<?php foreach(explode(',', $github_accounts) as $account): ?>
-
-<a
-    href="/github/import/<?=$account?>"
-    class="w3-button w3-white w3-border"
->
-    <i class="fa-solid fa-pen-to-square fa-padding-right"></i> Import <?=$account?>
+<a href="https://github.com/<?=$record['owner']?>/<?=$record['name']?>">
+    <i class="fa-brands fa-github" aria-hidden="true"></i> /<?=$record['owner']?>/<?=$record['name']?>
 </a>
 
-<?php endforeach; ?>
+<p>
+    Pull requests: <span class="w3-tag w3-blue"><?=$record['pull_requests']?></span> 
+    Errors found: <span class="w3-tag w3-blue"><?=$record['error_count']?></span> 
+    Last scan: <span class="w3-tag w3-blue"><?=(new DateTime($record['updated_at']))->format("D, M j g:i A")?></span>
+</p>
 
-<hr />
+<ul class="w3-ul w3-margin-bottom">
+    <?php foreach(explode(chr(13), $record['error_comments']) as $error): ?>
+        <li><?=$error?></li>
+    <?php endforeach; ?>
+</ul>
 
-<div
-    class="w3-row-padding"
-    style="margin-left: -16px; margin-right: -16px"
+<a
+    href="/github/repo/rescan/<?=$record['name']?>"
+    class="w3-button w3-white w3-border"
 >
-    <div class="w3-half">
-        <div class="w3-card">
-            <header class="w3-container w3-grey w3-padding w3-text-white">
-                <i class="bm-colours"></i> Uptime Status
-            </header>
-            <div class="w3-container w3-padding">Uptime Status Summary</div>
-            <footer class="w3-container w3-border-top w3-padding">
-                <a
-                    href="/uptime/colours"
-                    class="w3-button w3-border w3-white"
-                >
-                    <i class="fa-regular fa-file-lines fa-padding-right"></i>
-                    Full Report
-                </a>
-            </footer>
-        </div>
-    </div>
-    <div class="w3-half">
-        <div class="w3-card">
-            <header class="w3-container w3-grey w3-padding w3-text-white">
-                <i class="bm-colours"></i> Stat Summary
-            </header>
-            <div class="w3-container w3-padding">App Statistics Summary</div>
-            <footer class="w3-container w3-border-top w3-padding">
-                <a
-                    href="/stats/colours"
-                    class="w3-button w3-border w3-white"
-                >
-                    <i class="fa-regular fa-chart-bar fa-padding-right"></i> Full Report
-                </a>
-            </footer>
-        </div>
-    </div>
-</div>
+    <i class="fa-solid fa-pen-to-square fa-padding-right"></i> Rescan Repo
+</a>
 
 <?php
 
