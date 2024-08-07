@@ -325,6 +325,16 @@ function navigation_array($selected = false)
                                 ],[
                                     'br' => '---'
                                 ],[
+                                    'title' => 'BrickMMO on GitHub',
+                                    'url' => 'https://github.com/BrickMMO',
+                                    'colour' => 'orange'
+                                ],[
+                                    'title' => 'codeadamca on GitHub',
+                                    'url' => 'https://github.com/codeadamca',
+                                    'colour' => 'orange'
+                                ],[
+                                    'br' => '---'
+                                ],[
                                     'title' => 'Stats Report',
                                     'url' => '/stats/github',
                                     'colour' => 'orange'
