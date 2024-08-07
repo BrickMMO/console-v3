@@ -27,7 +27,7 @@ if(isset($_GET['key'])) {
 
         foreach($colorArray as $index => $color){
 
-            $rgbColorDistance = colorDistance($color['rgb'], $_GET['key']);
+            $rgbColorDistance = colour_distance($color['rgb'], $_GET['key']);
 
             $colorDistanceArray[$index]['colorDistance'] = $rgbColorDistance;
         }
@@ -56,29 +56,4 @@ if(isset($_GET['key'])) {
             'colours' => null,
         );
     }
-}
-
-function colorDistance($colorArray, $colourSearch) {
-
-    $colorArray = hexToRgb($colorArray);
-    $colourSearch = hexToRgb($colourSearch);
-
-    $redDifference = $colorArray[0] - $colourSearch[0];
-    $greenDifference = $colorArray[1] - $colourSearch[1];
-    $blueDifference = $colorArray[2] - $colourSearch[2];
-
-    return sqrt(($redDifference ** 2) + ($greenDifference ** 2) + ($blueDifference ** 2));       
-}
-
-function hexToRgb($hex) {
-
-    if(strlen($hex) === 3){
-        $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
-    }
-    
-    $r = hexdec(substr($hex, 0, 2));
-    $g = hexdec(substr($hex, 2, 2));
-    $b = hexdec(substr($hex, 4, 2));
-
-    return [$r, $g, $b];
 }

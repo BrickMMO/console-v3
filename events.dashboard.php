@@ -203,13 +203,14 @@ $events_date_created = mysqli_query($connect, $query);
                     FROM participants 
                     INNER JOIN events 
                     ON events.id = event_id 
-                    WHERE event_name = "'. $event['event_name'] .'" 
+                    WHERE event_name = "'. $event['event_name'] .'"
+                    ORDER BY participants.created_at DESC 
                     LIMIT '.$event['count_participants'];
                 
                     $participants = mysqli_query($connect, $query);
                     while($participant = mysqli_fetch_assoc($participants)):
                 ?>
-                <p style="font-size: 12px">Name: <strong><?=$participant['first_name'] . $participant['last_name']?></strong>
+                <p style="font-size: 12px">Name: <strong><?=$participant['first_name'] . " " .  $participant['last_name']?></strong>
                 <br> Email: <strong><?=$participant['email']?></strong>
                 <?php 
                     $created_at = new DateTime($participant['created_at']);
