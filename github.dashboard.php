@@ -94,23 +94,6 @@ $result = mysqli_query($connect, $query);
     <div class="w3-half">
         <div class="w3-card">
             <header class="w3-container w3-grey w3-padding w3-text-white">
-                <i class="bm-colours"></i> Uptime Status
-            </header>
-            <div class="w3-container w3-padding">Uptime Status Summary</div>
-            <footer class="w3-container w3-border-top w3-padding">
-                <a
-                    href="/uptime/colours"
-                    class="w3-button w3-border w3-white"
-                >
-                    <i class="fa-regular fa-file-lines fa-padding-right"></i>
-                    Full Report
-                </a>
-            </footer>
-        </div>
-    </div>
-    <div class="w3-half">
-        <div class="w3-card">
-            <header class="w3-container w3-grey w3-padding w3-text-white">
                 <i class="bm-colours"></i> Stat Summary
             </header>
             <div class="w3-container w3-padding">App Statistics Summary</div>
