@@ -42,6 +42,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         )';
     mysqli_query($connect, $query);
 
+    $insert_id = mysqli_insert_id($connect);
+
+    if (validate_image($_FILES['photo']))
+    {
+        $photo = 'data:image/jpeg;base64, '.base64_encode(file_get_contents($_FILES['photo']['tmp_name']));
+        
+        $query = 'UPDATE events SET
+            photo = "'.addslashes($photo).'"
+            WHERE id = '.$insert_id.'
+            LIMIT 1';
+        mysqli_query($connect, $query);
+    }
+
     message_set('Event Success', 'Your event has been added.');
     header_redirect('/events/list');
     
@@ -85,6 +98,7 @@ include('templates/message.php');
 <h2>Add Event</h2>
 
 <form
+    enctype="multipart/form-data"
     method="post"
     novalidate
     id="main-form"
@@ -99,6 +113,18 @@ include('templates/message.php');
     />
     <label for="event_name" class="w3-text-gray">
         Event Name <span id="event_name_error" class="w3-text-red"></span>
+    </label>
+
+    <input  
+        name="photo" 
+        class="w3-input w3-border" 
+        type="file" 
+        id="photo" 
+        autocomplete="off"
+    />
+
+    <label for="photo" class="w3-text-gray">
+        Photo
     </label>
 
     <input  

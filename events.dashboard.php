@@ -91,7 +91,7 @@ $events_date_created = mysqli_query($connect, $query);
     ?>
 
         <div class="w3-col l3 m5 s12 w3-border w3-margin-right w3-margin-bottom">
-            <div class="w3-display-container" style="background-color: #D9D9D9; height: 168px">
+            <div class="w3-display-container" style="background-image: url('<?=events_avatar($event['id']);?>'); background-size: cover; background-position: center; height: 168px">
                 <p class="w3-padding w3-display-bottomright w3-margin-right w3-round-xlarge" style="background-color: #B2B2B2; font-size: 12px">
                     <strong><?= $start_date->format("D, M j g:i A") ?></strong>
                 </p>
@@ -139,7 +139,7 @@ $events_date_created = mysqli_query($connect, $query);
     ?>
 
         <div class="w3-col l3 m5 s12 w3-border w3-margin-right w3-margin-bottom">
-            <div class="w3-display-container" style="background-color: #D9D9D9; height: 168px">
+            <div class="w3-display-container" style="background-image: url('<?=events_avatar($event['id']);?>'); background-size: cover; background-position: center; height: 168px">
                 <p class="w3-padding w3-display-bottomright w3-margin-right w3-round-xlarge" style="background-color: #B2B2B2; font-size: 12px">
                     <strong><?= $start_date->format("D, M j g:i A") ?></strong>
                 </p>
