@@ -35,6 +35,17 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST')
         
     mysqli_query($connect, $query);
 
+    if (validate_image($_FILES['photo']))
+    {
+        $photo = 'data:image/jpeg;base64, '.base64_encode(file_get_contents($_FILES['photo']['tmp_name']));
+        
+        $query = 'UPDATE events SET
+            photo = "'.addslashes($photo).'"
+            WHERE id = '.$_GET['key'].'
+            LIMIT 1';
+        mysqli_query($connect, $query);
+    }
+
     message_set('Event Success', 'The event has been edited.');
     header_redirect('/events/list');
     
@@ -91,6 +102,7 @@ $result = mysqli_query($connect, $query);
 <h2>Edit Event: <?=$event['event_name']?></h2>
 
 <form
+    enctype="multipart/form-data"
     method="post"
     novalidate
     id="main-form"
@@ -106,6 +118,18 @@ $result = mysqli_query($connect, $query);
     />
     <label for="event_name" class="w3-text-gray">
         Event Name <span id="event_name_error" class="w3-text-red"></span>
+    </label>
+
+    <input  
+        name="photo" 
+        class="w3-input w3-border" 
+        type="file" 
+        id="photo" 
+        autocomplete="off"
+    />
+
+    <label for="photo" class="w3-text-gray">
+        Photo
     </label>
 
     <input  

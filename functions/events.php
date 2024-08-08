@@ -1,6 +1,6 @@
 <?php
 
-function events_avatar($id)
+function events_photo($id)
 {
     $event = events_fetch($id);
     return $event['photo'] ? $event['photo'] : '/images/no_city.png';
