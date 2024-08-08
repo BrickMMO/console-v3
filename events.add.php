@@ -23,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             detail_description, 
             max_capacity,
             tickets_bought,
-            price,
             created_at,
             updated_at
         ) VALUES (
@@ -36,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             "'.addslashes($_POST['detail_description']).'",
             "'.addslashes($_POST['max_capacity']).'",
             0,
-            0.00,
             NOW(),
             NOW()
         )';
