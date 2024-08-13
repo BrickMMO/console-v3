@@ -254,6 +254,33 @@ function navigation_array($selected = false)
                             'icon' => 'bm-stores',
                             'url' => '/stores/dashboard',
                             'title' => 'Stores',
+                            'sub-pages' => [
+                                [
+                                    'title' => 'Dashboard',
+                                    'url' => '/stores/dashboard',
+                                    'colour' => 'red'
+                                ],[
+                                    'title' => 'Import Stores',
+                                    'url' => '/stores/import',
+                                    'colour' => 'red'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Visit Stores App',
+                                    'url' => 'https://stores.brickmmo.com',
+                                    'colour' => 'orange'
+                                ],[
+                                    'br' => '---'
+                                ],[
+                                    'title' => 'Uptime Report',
+                                    'url' => '/uptime/stores',
+                                    'colour' => 'orange'
+                                ],[
+                                    'title' => 'Stats Report',
+                                    'url' => '/uptime/stats',
+                                    'colour' => 'orange'
+                                ]
+                            ]
                         ],[
                             'icon' => 'bm-media',
                             'url' => '/media/dashboard',
