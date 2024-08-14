@@ -3,106 +3,7 @@
 security_check();
 admin_check();
 
-$stores_last_import = setting_fetch('STORES_LAST_IMPORT');
-
-$url = 'https://www.lego.com/api/graphql/StoresDirectory';
-
-$query = '
-query {
-  storesDirectory {
-    id
-    country
-    region
-    stores {
-      storeId
-      name
-      phone
-      state
-      phone
-      openingDate
-      certified
-      additionalInfo
-      storeUrl
-      urlKey
-      isNewStore
-      isComingSoon
-      __typename
-    }
-    __typename
-  }
-}';
-
-$data = array('query' => $query);
-$jsonData = json_encode($data);
-
-$curl = curl_init($url);
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-    'Content-Type: application/json',
-    'Content-Length: ' . strlen($jsonData)
-));
-curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonData);
-
-$response = curl_exec($curl);
-
-if (curl_errno($curl)) {
-    echo 'Error:' . curl_error($curl);
-} else {
-    $responseData = json_decode($response, true);
-
-    $query = 'TRUNCATE TABLE stores';
-    mysqli_query($connect, $query);
-
-    $query = 'UPDATE settings SET 
-    value = NOW() 
-    WHERE name = "STORES_LAST_IMPORT" 
-    LIMIT 1';
-    mysqli_query($connect, $query);
-
-    $stores = [];
-    foreach ($responseData['data']['storesDirectory'] as $storesDirectory) {
-        foreach ($storesDirectory['stores'] as $store) {
-            $query = 'INSERT INTO stores (
-                name,
-                store_id,
-                phone,
-                certified,
-                additional_info,
-                store_url,
-                created_at,
-                updated_at
-            ) VALUES (
-                "'.htmlspecialchars($store['name']).'",
-                "'.htmlspecialchars($store['storeId']).'",
-                "'.htmlspecialchars($store['phone']).'",
-                "'.($store['certified'] ? 'Yes' : 'No').'",
-                "'.htmlspecialchars($store['additionalInfo']).'",
-                "'.htmlspecialchars($store['storeUrl']).'",
-                NOW(),
-                NOW()
-            )';
-            mysqli_query($connect, $query);
-
-            $stores[] = [
-                'name' => htmlspecialchars($store['name']),
-                'storeId' => htmlspecialchars($store['storeId']),
-                'phone' => htmlspecialchars($store['phone']),
-                'certified' => $store['certified'] ? 'Yes' : 'No',
-                'additionalInfo' => htmlspecialchars($store['additionalInfo']),
-                'storeUrl' => htmlspecialchars($store['storeUrl'])
-            ];
-        }
-    }
-    echo '<script>';
-    echo 'let stores = ' . json_encode($stores) . ';';
-    echo '</script>';
-}
-curl_close($curl);
-
-    
+$stores_last_import = setting_fetch('STORES_LAST_IMPORT');   
 
 define('APP_NAME', 'Stores');
 
@@ -118,9 +19,8 @@ include('templates/main_header.php');
 
 include('templates/message.php');
 
-$query = 'SELECT * 
-    FROM stores';
-$result = mysqli_query($connect, $query);
+$query = 'TRUNCATE TABLE stores';
+mysqli_query($connect, $query);
 
 ?>
 
@@ -143,9 +43,11 @@ $result = mysqli_query($connect, $query);
 <h2>Importing Stores</h2>
 
 <p>
-    Importing:
-    <span class="w3-tag w3-blue" id="repo-count">0/0</span>
-    Stores imported from 
+    Total Countries:
+    <span class="w3-tag w3-blue" id="country-count">0</span>
+    Importing Stores:
+    <span class="w3-tag w3-blue" id="store-count">0/0</span>
+    Importing from: 
     <a href="https://www.lego.com/en-ca/stores">LEGO® Store</a>.
 </p>
 
@@ -164,45 +66,77 @@ $result = mysqli_query($connect, $query);
 </div>
 
 <script>
-    let container = document.getElementById('storeContainer');
-    let loading = document.getElementById('loading');
-    let progress = document.getElementById('progress');
-    let repoCount = document.getElementById('repo-count');
-    
-    repoCount.innerHTML = '0/'+<?=mysqli_num_rows($result)?>;
-        let index = 0;
 
-        function showNextCard() {
-            if (index < stores.length) {
-                let percent = Math.round(((index+1) / <?=mysqli_num_rows($result)?>) * 100)+'%';
+    async function fetchStores() {
+        return fetch('/ajax/lego/stores',{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })  
+            .then((response)=>response.json())
+            .then((responseJson)=>{return responseJson});
+    }
+
+    async function scanStores() {
+
+        let loading = document.getElementById('loading');
+        let progress = document.getElementById('progress');
+        let countryCount = document.getElementById('country-count');
+        let storeCount = document.getElementById('store-count');
+
+        let totalStores = 0;
+        let countProgress = 0;
+    
+        const resultStore = await fetchStores();
+
+        let countCountry = resultStore.stores.data.storesDirectory;
+
+        countryCount.innerHTML = countCountry.length;
+
+        for(let i = 0; i < countCountry.length; i++){
+            totalStores = totalStores + countCountry[i].stores.length;            
+        }
+        
+        storeCount.innerHTML = '0/'+totalStores;
+
+        console.log(resultStore);
+
+        
+        for(let i = 0; i < countCountry.length; i++)
+        {
+            for(let j = 0; j < countCountry[i].stores.length; j++){
+                let percent = Math.round(((countProgress+1) / totalStores) * 100)+'%';
 
                 progress.innerHTML = percent;
                 progress.style.width = percent;
 
-                repoCount.innerHTML = (index+1)+'/'+<?=mysqli_num_rows($result)?>;
+                storeCount.innerHTML = (countProgress+1)+'/'+totalStores;
 
-                const store = stores[index];
-                const card = document.createElement('div');
-                card.className = 'w3-border w3-padding';
-                card.innerHTML = `
-                    <h2>${store.name}</h2>
-                    <p><strong>Store ID:</strong> ${store.storeId}</p>
-                    <p><strong>Phone:</strong> ${store.phone}</p>
-                    <p><strong>Certified:</strong> ${store.certified}</p>
-                    <p><strong>Additional Info:</strong> ${store.additionalInfo}</p>
-                    <a href="${store.storeUrl}" target="_blank">Visit Store Page</a>
-                `;
-                container.appendChild(card);
-                setTimeout(() => {
-                    card.style.opacity = 1;
-                }, 10); // Necesario para forzar la transición
+                if(i == 0 && j == 0) loading.innerHTML = '';
 
-                index++;
-                setTimeout(showNextCard, 1000); // Pausa de 2 segundos entre cada carta
+                let div = document.createElement('div');
+
+                let h3 = document.createElement('h3');
+                div.append(h3);
+
+                let h3Text = document.createTextNode(countCountry[i].stores[j].name);
+                h3.append(h3Text);
+
+                let hr = document.createElement('hr');
+                div.append(hr);
+
+                loading.prepend(div);
+
+                countProgress++;
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
-        }
+        }     
+    }
 
-        showNextCard();
+    scanStores();
+
 </script>
 
     
