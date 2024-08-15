@@ -150,8 +150,8 @@ $participants_count = mysqli_num_rows($participants);
 <?php else: ?>
 
 <p>
-    There are not events yet. 
-    <a href="https://events.brickmmo.com/">Add a new Event</a>.
+    There are not registrations yet. 
+    <a href="add">Add a new Registration</a>.
 </p>
 
 <?php endif; ?>

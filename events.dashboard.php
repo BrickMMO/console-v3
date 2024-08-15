@@ -112,7 +112,7 @@ $events_date_created = mysqli_query($connect, $query);
 
     <p>
         There are not events yet. 
-        <a href="https://events.brickmmo.com/">Add a new Event</a>.
+        <a href="add">Add a new Event</a>.
     </p>
 
 <?php endif; ?>
@@ -165,7 +165,7 @@ $events_date_created = mysqli_query($connect, $query);
 
     <p>
         There are not events yet. 
-        <a href="https://events.brickmmo.com/">Add a new Event</a>.
+        <a href="add">Add a new Event</a>.
     </p>
 
 <?php endif; ?>
@@ -228,7 +228,7 @@ $events_date_created = mysqli_query($connect, $query);
 
     <p>
         There are not registrations yet. 
-        <a href="https://events.brickmmo.com/">Add a new Event</a>.
+        <a href="registrations/add">Add a new Registration</a>.
     </p>
 
 <?php endif; ?>

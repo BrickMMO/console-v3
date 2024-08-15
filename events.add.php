@@ -87,7 +87,7 @@ include('templates/message.php');
 <p>
     <a href="/city/dashboard">Dashboard</a> / 
     <a href="/events/dashboard">Events</a> / 
-    <a href="/events/registrations/list">Registrations List</a> / 
+    <a href="/events/list">List</a> / 
     Add Event
 </p>
 
