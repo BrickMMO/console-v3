@@ -30,6 +30,7 @@ query StoreInfo($urlKey: String!) {
     storeUrl
     urlKey
     streetAddress
+    country
     city
     postalCode
     state

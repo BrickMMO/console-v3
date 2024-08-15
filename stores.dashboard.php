@@ -52,11 +52,12 @@ $stores_last_import = setting_fetch('STORES_LAST_IMPORT');
 
 <?php if (mysqli_num_rows($result)): ?>
 
-    <div class="w3-container w3-border w3-padding-16 w3-margin-bottom">
+    <div class="w3-container w3-border w3-padding-16 w3-margin-bottom" style="max-height: 500px; overflow: scroll;">
 
         <?php while($store = mysqli_fetch_assoc($result)): ?>
 
-            <div class="w3-container w3-col l4 w3-border">
+            <div class="w3-container w3-padding w3-col l4 w3-border">
+                <div class="w3-border-bottom" style="background-image: url('<?=stores_image($store['id']);?>'); background-size: cover; background-position: center; height: 168px"></div>
                 <p><strong><?=$store['name']?></strong></p>
                 <p><strong>Store ID:</strong> <?=$store['store_id']?></p>
                 <p><strong>Phone:</strong> <?=$store['phone']?></p>

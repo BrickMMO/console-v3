@@ -122,6 +122,8 @@ mysqli_query($connect, $query);
 
                 const storeInfo = await scanStore(countCountry[i].stores[j].urlKey);
 
+                const detailsStore = storeInfo.storeInfo.data.storeInfo;
+
                 if(i == 0 && j == 0) loading.innerHTML = '';
 
                 let div = document.createElement('div');
@@ -131,6 +133,22 @@ mysqli_query($connect, $query);
 
                 let h3Text = document.createTextNode(countCountry[i].stores[j].name);
                 h3.append(h3Text);
+
+                let country = document.createElement('p');
+                country.innerHTML = '<strong>Country: </strong>' + detailsStore.country;
+                div.append(country);
+
+                let city = document.createElement('p');
+                city.innerHTML = '<strong>City: </strong>' + detailsStore.city;
+                div.append(city);
+
+                let phone = document.createElement('p');
+                phone.innerHTML = '<strong>Phone: </strong>' + detailsStore.phone;
+                div.append(phone);
+
+                let urlKey = document.createElement('p');
+                urlKey.innerHTML = '<strong>UrlKey: </strong>' + detailsStore.urlKey;
+                div.append(urlKey);
 
                 let hr = document.createElement('hr');
                 div.append(hr);
