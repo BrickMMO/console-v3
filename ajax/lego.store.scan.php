@@ -120,10 +120,31 @@ if (curl_errno($ch)) {
 
 curl_close($ch);
 
+$query = 'INSERT INTO stores (
+  name,
+  store_id,
+  phone,
+  certified,
+  additional_info,
+  store_url,
+  image,
+  created_at,
+  updated_at
+) VALUES (
+  "'.addslashes($storeInfo['data']['storeInfo']['name']).'",
+  "'.addslashes($storeInfo['data']['storeInfo']['storeId']).'",
+  "'.addslashes($storeInfo['data']['storeInfo']['phone']).'",
+  "'.($storeInfo['data']['storeInfo']['certified'] ? 'Yes' : 'No').'",
+  "'.addslashes($storeInfo['data']['storeInfo']['additionalInfo']).'",
+  "'.addslashes($storeInfo['data']['storeInfo']['storeUrl']).'",  
+  '.(($storeInfo['data']['storeInfo']['storeImage'] !== NULL) ? '"data:image/jpeg;base64, '.base64_encode(file_get_contents(addslashes($storeInfo['data']['storeInfo']['storeImage']['small']['url']))) .'"' : 'NULL' ).',
+  NOW(),
+  NOW()
+)';
+mysqli_query($connect, $query);
+
 $data = array(
     'message' => 'LEGO Store information has been retrieved.',
     'error' => false, 
     'storeInfo' => $storeInfo
 );
-
-

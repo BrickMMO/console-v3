@@ -60,6 +60,15 @@ if (curl_errno($ch)) {
 
 curl_close($ch);
 
+$query = 'TRUNCATE TABLE stores';
+mysqli_query($connect, $query);
+
+$query = 'UPDATE settings SET 
+  value = NOW() 
+  WHERE name = "STORES_LAST_IMPORT" 
+  LIMIT 1';
+mysqli_query($connect, $query);
+
 $data = array(
     'message' => 'LEGO Stores has been retrieved.',
     'error' => false, 
