@@ -58,7 +58,6 @@ mysqli_query($connect, $query);
 </div>
 
 <div class="w3-container w3-border w3-padding-16 w3-margin-bottom" id="loading" style="max-height: 500px; overflow: scroll;">
-    <div class="container" id="storeContainer"></div>
     <h3>
         <i class="fa-solid fa-spinner fa-spin"></i>
         Loading...
@@ -69,6 +68,17 @@ mysqli_query($connect, $query);
 
     async function fetchStores() {
         return fetch('/ajax/lego/stores',{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })  
+            .then((response)=>response.json())
+            .then((responseJson)=>{return responseJson});
+    }
+
+    async function scanStore(urlKey) {
+        return fetch('/ajax/lego/store/scan/urlKey/'+urlKey,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -100,9 +110,6 @@ mysqli_query($connect, $query);
         
         storeCount.innerHTML = '0/'+totalStores;
 
-        console.log(resultStore);
-
-        
         for(let i = 0; i < countCountry.length; i++)
         {
             for(let j = 0; j < countCountry[i].stores.length; j++){
@@ -112,6 +119,8 @@ mysqli_query($connect, $query);
                 progress.style.width = percent;
 
                 storeCount.innerHTML = (countProgress+1)+'/'+totalStores;
+
+                const storeInfo = await scanStore(countCountry[i].stores[j].urlKey);
 
                 if(i == 0 && j == 0) loading.innerHTML = '';
 
@@ -130,7 +139,7 @@ mysqli_query($connect, $query);
 
                 countProgress++;
                 
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 0));
             }
         }     
     }
