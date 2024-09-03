@@ -264,6 +264,10 @@ function navigation_array($selected = false)
                                     'url' => '/stores/import',
                                     'colour' => 'red'
                                 ],[
+                                    'title' => 'Import Countries',
+                                    'url' => '/stores/countries',
+                                    'colour' => 'red'
+                                ],[
                                     'br' => '---'
                                 ],[
                                     'title' => 'Visit Stores App',

@@ -121,24 +121,31 @@ if (curl_errno($ch)) {
 
 curl_close($ch);
 
+$query = 'SELECT id
+    FROM countries 
+    WHERE country_code = "' . $storeInfo['data']['storeInfo']['country'] . '"';
+$result = mysqli_query($connect, $query);
+
+$coutery_id = mysqli_fetch_assoc($result);
+
+$countries = json_decode(file_get_contents("http://country.io/names.json"), true);
+
+$storeInfo['data']['storeInfo']['country'] = $countries[$storeInfo['data']['storeInfo']['country']];
+
 $query = 'INSERT INTO stores (
   name,
+  country_id,
   store_id,
-  phone,
-  certified,
-  additional_info,
-  store_url,
   image,
+  json,
   created_at,
   updated_at
 ) VALUES (
   "'.addslashes($storeInfo['data']['storeInfo']['name']).'",
+  "'.$coutery_id['id'].'",
   "'.addslashes($storeInfo['data']['storeInfo']['storeId']).'",
-  "'.addslashes($storeInfo['data']['storeInfo']['phone']).'",
-  "'.($storeInfo['data']['storeInfo']['certified'] ? 'Yes' : 'No').'",
-  "'.addslashes($storeInfo['data']['storeInfo']['additionalInfo']).'",
-  "'.addslashes($storeInfo['data']['storeInfo']['storeUrl']).'",  
   '.(($storeInfo['data']['storeInfo']['storeImage'] !== NULL) ? '"data:image/jpeg;base64, '.base64_encode(file_get_contents(addslashes($storeInfo['data']['storeInfo']['storeImage']['small']['url']))) .'"' : 'NULL' ).',
+  "'.addslashes(json_encode($storeInfo['data']['storeInfo'])).'", 
   NOW(),
   NOW()
 )';
